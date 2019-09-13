@@ -29,7 +29,7 @@ find_package (Threads REQUIRED) #threading
 #------------------------------------------------------------------------------
 # By using macro to add common dependencies you can avoid repetition when you have
 # multiple binaries.
-# Use with `addCommonDependencies(exampleApp)`
+# Use with `addCommonDependencies(noobsEngine)`
 # macro(addCommonDependencies TARGET)
 #     add_dependencies(${TARGET} versionFileTouchForRebuild) # We want precise time of build in version
 #     target_include_directories(${TARGET} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -38,59 +38,59 @@ find_package (Threads REQUIRED) #threading
 # endmacro()
 
 #-------------------------------------------------------------------------------
-# exampleApp executable setup
+# noobsEngine executable setup
 
 set(ICON_RESOURCE "")
 if(WIN32) #windows icon resource file, provided from /packaging directory
-    set(ICON_RESOURCE "${PROJECT_BINARY_DIR}/exampleApp.icon.rc")
+    set(ICON_RESOURCE "${PROJECT_BINARY_DIR}/noobsEngine.icon.rc")
 elseif (APPLE) #osx icon ressource file, provided from /packaging directory
-    set(ICON_RESOURCE "${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns")
+    set(ICON_RESOURCE "${PROJECT_SOURCE_DIR}/packaging/noobsEngine.icns")
 endif()
 
-add_executable(exampleApp MACOSX_BUNDLE
+add_executable(noobsEngine MACOSX_BUNDLE
     ${ICON_RESOURCE}
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
     SomeClass.cpp
     SomeClass.h
     main.cpp)
-add_dependencies(exampleApp versionFileTouchForRebuild) # We want precise time of build in version
-target_include_directories(exampleApp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries (exampleApp PRIVATE Threads::Threads)
+add_dependencies(noobsEngine versionFileTouchForRebuild) # We want precise time of build in version
+target_include_directories(noobsEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries (noobsEngine PRIVATE Threads::Threads)
 
 if(APPLE)
-    set_target_properties(exampleApp PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "exampleApp")
-    set_target_properties(exampleApp PROPERTIES MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.exampleApp.exampleApp")
-    set_target_properties(exampleApp PROPERTIES MACOSX_BUNDLE_ICON_FILE exampleApp.icns)
-    set_target_properties(exampleApp PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
-    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "exampleApp")
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.exampleApp.exampleApp")
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_ICON_FILE exampleApp.icns)
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
+    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/noobsEngine.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
-install(TARGETS exampleApp
+install(TARGETS noobsEngine
     BUNDLE DESTINATION "."
     RUNTIME DESTINATION bin)
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
-# Provides exampleApp-run and exampleApp-dbg
-addRunAndDebugTargets(exampleApp)
+# Provides noobsEngine-run and exampleApp-dbg
+addRunAndDebugTargets(noobsEngine)
 
 # short convenience target from cmake/cleanCpppExtensions.cpp
-add_custom_target(run DEPENDS exampleApp-run)
+add_custom_target(run DEPENDS noobsEngine-run)
 
 # Manually specified convenience target for running the binary, we use macro
-# add_custom_target(exampleApp-run
+# add_custom_target(noobsEngine-run
 #     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/bin
 #     USES_TERMINAL
-#     COMMAND ./exampleApp
+#     COMMAND ./noobsEngine
 #     DEPENDS Install_)
 
 # And this would add -DBAR_ENABLE_FEATURE or equivalent to build command
-# target_compile_definitions(exampleApp PRIVATE BAR_ENABLE_FEATURE)
+# target_compile_definitions(noobsEngine PRIVATE BAR_ENABLE_FEATURE)
 
 # Add compile time definition based on option
 # option(OPTION_NAME "description for end user" OFF)
 # if(OPTION_NAME)
 #     # you can do anything here, eg. setup new optional executable
-#     target_compile_definitions(exampleApp PRIVATE DEFINE_NAME)
+#     target_compile_definitions(noobsEngine PRIVATE DEFINE_NAME)
 # endif()
 
 # Add building new shared library
@@ -101,18 +101,18 @@ add_custom_target(run DEPENDS exampleApp-run)
 # How to include and link OpenGL and GLUT libraries
 # find_package(OpenGL REQUIRED)
 # find_package(GLUT REQUIRED)
-# target_include_directories(exampleApp PRIVATE SYSTEM ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} )
-# target_link_libraries(exampleApp PRIVATE ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+# target_include_directories(noobsEngine PRIVATE SYSTEM ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} )
+# target_link_libraries(noobsEngine PRIVATE ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
 
 # How to use some other standard packages
 # find_package(ZLIB REQUIRED) 
-# target_link_libraries (exampleApp PRIVATE ZLIB::ZLIB)
+# target_link_libraries (noobsEngine PRIVATE ZLIB::ZLIB)
 # 
 # find_package(OpenSSL REQUIRED)
-# target_link_libraries (exampleApp PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+# target_link_libraries (noobsEngine PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 #
 # find_package(CURL REQUIRED)
-# target_link_libraries (exampleApp PRIVATE CURL::libcurl)
+# target_link_libraries (noobsEngine PRIVATE CURL::libcurl)
 
 #------------------------------------------------------------------------------
 # Unit tests

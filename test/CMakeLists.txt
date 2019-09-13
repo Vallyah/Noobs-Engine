@@ -10,13 +10,13 @@ add_custom_target(check
     COMMAND echo [----] Running tests
     USES_TERMINAL
     COMMAND ${CMAKE_CTEST_COMMAND}  --output-on-failure -C Debug
-    DEPENDS exampleApp unittests)
+    DEPENDS noobsEngine unittests)
 
 add_custom_target(checkVerbose
     COMMAND echo [----] Running tests
     USES_TERMINAL
     COMMAND ${CMAKE_CTEST_COMMAND}  -V --output-on-failure -C Debug
-    DEPENDS exampleApp unittests)
+    DEPENDS noobsEngine unittests)
 
 #------------------------------------------------------------------------------
 # CTest test suite
@@ -30,13 +30,13 @@ add_custom_target(checkVerbose
 
 # Basic runable tests (will not crash)
 add_test(NAME "Is_Runable "
-    COMMAND $<TARGET_FILE:exampleApp>)
+    COMMAND $<TARGET_FILE:noobsEngine>)
 
 add_test(NAME "Is_Runable-v"
-    COMMAND $<TARGET_FILE:exampleApp> -v)
+    COMMAND $<TARGET_FILE:noobsEngine> -v)
 
 add_test(NAME "Is_Runable-h"
-    COMMAND $<TARGET_FILE:exampleApp> -h)
+    COMMAND $<TARGET_FILE:noobsEngine> -h)
 
 
 

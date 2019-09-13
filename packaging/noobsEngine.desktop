@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Noob's Engine
+Comment=This is a 3D Engine made by a noob
+Keywords=cpp;cmake;engine;noob;
+Exec=noobsEngine
+Icon=noobsEngine.png
+Terminal=true
+Type=Application
+Categories=Utility;Photography;GNOME;GTK;

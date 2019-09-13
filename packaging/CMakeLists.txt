@@ -3,12 +3,12 @@
 # CPACK
 include(InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGE_VENDOR "kracejic")
+set(CPACK_PACKAGE_VENDOR "Vallyah")
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-set(CPACK_PACKAGE_CONTACT "kracejic <kracejic@gmail.com>")
-set(HOMEPAGE "https://github.com/kracejic/cleanCppProject")
+set(CPACK_PACKAGE_CONTACT "Vallyah <bcardonne@hotmail.fr>")
+set(HOMEPAGE "https://github.com/Vallyah/noobsEngine")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-    "Clean cpp project. This is simple cpp example project build with CMake.")
+    "Noob's Engine. This is a 3D engine made by a noob following OpenGL tutorials.")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/readme.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/license.md")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
@@ -20,8 +20,8 @@ set(CPACK_PACKAGE_DIRECTORY "${CMAKE_BINARY_DIR}/out")
 
 
 # set human names to exetuables
-set(CPACK_PACKAGE_EXECUTABLES "exampleApp" "My Example Executable")
-set(CPACK_CREATE_DESKTOP_LINKS "exampleApp")
+set(CPACK_PACKAGE_EXECUTABLES "noobsEngine" "My Engine Executable")
+set(CPACK_CREATE_DESKTOP_LINKS "noobsEngine")
 set(CPACK_STRIP_FILES TRUE)
 
 if(WIN32 AND NOT UNIX)
@@ -41,7 +41,7 @@ if(WIN32 AND NOT UNIX)
         # sure there is at least one set of four (4) backlasshes.
         set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_NAME})
         # Icon of the installer
-        set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.ico")
+        set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\noobsEngine.ico")
         # set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
         # set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
         set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
@@ -50,13 +50,13 @@ if(WIN32 AND NOT UNIX)
         message(STATUS "   + NSIS                                 NO ")
     endif()
 
-    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\exampleApp.png")
+    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\noobsEngine.png")
 
     # Configure file with right path, place the result to PROJECT_BINARY_DIR.
-    # When ${PROJECT_BINARY_DIR}/exampleApp.icon.rc is added to an executable
-    # it will have icon specified in exampleApp.icon.in.rc
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.icon.in.rc
-        ${PROJECT_BINARY_DIR}/exampleApp.icon.rc)
+    # When ${PROJECT_BINARY_DIR}/noobsEngine.icon.rc is added to an executable
+    # it will have icon specified in noobsEngine.icon.in.rc
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/noobsEngine.icon.in.rc
+        ${PROJECT_BINARY_DIR}/noobsEngine.icon.rc)
 
 elseif(APPLE)
     #--------------------------------------------------------------------------
@@ -65,14 +65,14 @@ elseif(APPLE)
     set(CPACK_PACKAGING_INSTALL_PREFIX "/")
 
     set(MACOSX_BUNDLE_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
-    set(MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.exampleApp.exampleApp")
-    set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_SOURCE_DIR}/packaging/ exampleApp.icns)
+    set(MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.noobsEngine.exampleApp")
+    set(MACOSX_BUNDLE_ICON_FILE ${PROJECT_SOURCE_DIR}/packaging/ noobsEngine.icns)
     set(MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
     
-    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/exampleApp.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/noobsEngine.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     
-    set(CPACK_DMG_VOLUME_NAME "exampleApp")
+    set(CPACK_DMG_VOLUME_NAME "noobsEngine")
     set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/packaging/DS_Store.scpt") 
     set(CPACK_DMG_BACKGROUND_IMAGE "${PROJECT_SOURCE_DIR}/packaging/dmg_background.png")
     set(CPACK_OSX_PACKAGE_VERSION "10.6") #min package version
@@ -122,15 +122,15 @@ else()
 
     # Icon and app shortcut for Linux systems
     # Note: .desktop file must have same name as executable
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.desktop
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/noobsEngine.desktop
         DESTINATION share/applications/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         )
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/noobsEngine.png
         DESTINATION share/icons/hicolor/256x256/apps/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         )
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/noobsEngine.png
         DESTINATION share/icons/gnome/256x256/apps/
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         )
@@ -140,7 +140,7 @@ else()
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
         RENAME copyright)
     # set package icon
-    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/exampleApp.png")
+    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/noobsEngine.png")
 endif()
 
 

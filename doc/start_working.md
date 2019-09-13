@@ -21,22 +21,22 @@ be), read also `project_folder/test/CMakeLists.txt` and see how testing is done 
 Function main is in the `source/main.cpp`. 
 
 If you want to add an file, add it to `source/CMakeLists.txt` into *SRCS*
-variable, then it will be compiled to exampleApp target.
+variable, then it will be compiled to noobsEngine target.
 
 ## Change the name of the executable
 
 ### Manual proces:
 
-* **packaging/exampleApp.desktop.desktop** - rename file, change texts, replace "exampleApp" strings with your new executable name
-* **packaging/exampleApp.ico** - rename file
-* **packaging/exampleApp.icon.in.rc** - rename file, replace "exampleApp" strings with your new executable name
-* **packaging/exampleApp.png** - rename file
-* **packaging/CMakeLists.txt** - change description texts, windows desktop icon name (CPACK_NSIS_DISPLAY_NAME), replace "exampleApp" strings with your new executable name
-* **test/CMakeLists.txt** - replace "exampleApp" strings with your new executable name
-* **readme.md** - replace "exampleApp" strings with your new executable name
-* **source/CMakeLists.txt** - replace "exampleApp" strings with your new executable name
-* **doc/start_working.md** - replace "exampleApp" strings with your new executable name
-* **doc/directoryStructure.md** - replace "exampleApp" strings with your new executable name
+* **packaging/noobsEngine.desktop.desktop** - rename file, change texts, replace "noobsEngine" strings with your new executable name
+* **packaging/noobsEngine.ico** - rename file
+* **packaging/noobsEngine.icon.in.rc** - rename file, replace "noobsEngine" strings with your new executable name
+* **packaging/noobsEngine.png** - rename file
+* **packaging/CMakeLists.txt** - change description texts, windows desktop icon name (CPACK_NSIS_DISPLAY_NAME), replace "noobsEngine" strings with your new executable name
+* **test/CMakeLists.txt** - replace "noobsEngine" strings with your new executable name
+* **readme.md** - replace "noobsEngine" strings with your new executable name
+* **source/CMakeLists.txt** - replace "noobsEngine" strings with your new executable name
+* **doc/start_working.md** - replace "noobsEngine" strings with your new executable name
+* **doc/directoryStructure.md** - replace "noobsEngine" strings with your new executable name
 
 ### Automatic process (for linux):
 
@@ -46,25 +46,25 @@ simpler usage). If you created build directory starting with other than
 happily wreck your build directory with sed).
 
 We will first rename the files handling icons, then we run sed (streaming
-editor) and replace all occurences of exampleApp with your new name.
+editor) and replace all occurences of noobsEngine with your new name.
 
 ~~~bash
 cd [root/of/project]
 export NEWNAME="newExecutableName"
 
-git mv packaging/exampleApp.desktop    packaging/${NEWNAME}.desktop
-git mv packaging/exampleApp.ico        packaging/${NEWNAME}.ico
-git mv packaging/exampleApp.icon.in.rc packaging/${NEWNAME}.icon.in.rc 
-git mv packaging/exampleApp.png        packaging/${NEWNAME}.png
+git mv packaging/noobsEngine.desktop    packaging/${NEWNAME}.desktop
+git mv packaging/noobsEngine.ico        packaging/${NEWNAME}.ico
+git mv packaging/noobsEngine.icon.in.rc packaging/${NEWNAME}.icon.in.rc 
+git mv packaging/noobsEngine.png        packaging/${NEWNAME}.png
 
-ag -l exampleApp | xargs sed -i -e "s/exampleApp/${NEWNAME}/g"
+ag -l noobsEngine | xargs sed -i -e "s/noobsEngine/${NEWNAME}/g"
 ~~~
 
 Then change description in **.desktop** and **packaging/CMakeLists.txt** files.
 
 ## Change icon
 
-Just change replace packaging/exampleApp.ico and packaging/exampleApp.png with
+Just change replace packaging/noobsEngine.ico and packaging/noobsEngine.png with
 your own images.
 
 ## Add depenencies

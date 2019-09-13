@@ -147,10 +147,10 @@ and you can now open a `.sln` file with Visual Studio. You need to right click o
     * *all* (the default if no target is provided)
     * *clean*
     * *install* - install binaries into *CMAKE_INSTALL_PREFIX*
-    * *exampleApp* - build exampleApp binary
-    * *exampleApp-run* - build, install and run exampleApp binary (for your convenience)
-    * *exampleApp-gdb* - build, install and run exampleApp binary in gdb (for your convenience)
-    * *run* - alias for exampleApp-run (in order to keep it short)
+    * *noobsEngine* - build exampleApp binary
+    * *noobsEngine-run* - build, install and run exampleApp binary (for your convenience)
+    * *noobsEngine-gdb* - build, install and run exampleApp binary in gdb (for your convenience)
+    * *run* - alias for noobsEngine-run (in order to keep it short)
 * Testing
     * *check* - run whole test suite (see test/CMakeLists.txt)
     * *checkVerbose* - run whole test suite (see test/CMakeLists.txt), but more verbose

@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.6)
 
 # Project setup, versioning stuff here, change when changing the version
 # Note: keep the project name lower case only for easy linux packaging support
-project (cleancppproject VERSION 0.3.5)
+project (noobsengine VERSION 0.0.1)
 set(VERSION_TYPE "beta" CACHE STRING "version type" FORCE)
 site_name(VERSION_HOST) # read hostname to VERSION_HOST
 set(VERSION_HOST "${VERSION_HOST}" CACHE STRING "host of build" FORCE)

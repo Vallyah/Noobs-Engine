@@ -22,10 +22,10 @@
             * doxygen settings, and modern style config
     - **packaging**
         + CMakeLists.txt - package creation
-        + exampleApp.desktop - linux shortcut (app is then visible in launchers)
-        + exampleApp.png - icon for linux shortcut
-        + exampleApp.icon.in.rc - icon for windows description file (used in source/CMakeLists.txt)
-        + exampleApp.ico - icon for windows shortcut (linked via exampleApp.icon.in.rc into the executable)
+        + noobsEngine.desktop - linux shortcut (app is then visible in launchers)
+        + noobsEngine.png - icon for linux shortcut
+        + noobsEngine.icon.in.rc - icon for windows description file (used in source/CMakeLists.txt)
+        + noobsEngine.ico - icon for windows shortcut (linked via noobsEngine.icon.in.rc into the executable)
     - **source** - contain source files
         + CMakeLists.txt - source building
         + .ycm_extra_conf.py - for ycm smart autocompletion
