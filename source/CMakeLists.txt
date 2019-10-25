@@ -115,6 +115,7 @@ add_custom_target(run DEPENDS noobsEngine-run)
 # target_link_libraries (noobsEngine PRIVATE CURL::libcurl)
 
 target_link_libraries (noobsEngine PRIVATE GLFW)
+target_link_libraries (noobsEngine PRIVATE GLAD)
 #------------------------------------------------------------------------------
 # Unit tests
 

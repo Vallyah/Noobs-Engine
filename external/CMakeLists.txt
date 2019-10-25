@@ -40,6 +40,12 @@ ExternalHeaderOnly_Add(Catch
 # #include <GLFW/glfw3.h>
 ExternalHeaderOnly_Add(GLFW
     "https://github.com/glfw/glfw" "master" "include")
+    
+#------------------------------------------------------------------------------
+# target_link_libraries (noobsEngine PRIVATE GLAD)
+# #include <glad/glad.h>
+add_library(GLAD INTERFACE)
+    target_include_directories(GLAD SYSTEM INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/Glad/include)
 
 #------------------------------------------------------------------------------
 # target_link_libraries (exampleApp PRIVATE doctest)
