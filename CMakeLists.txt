@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.6)
 
 # Project setup, versioning stuff here, change when changing the version
 # Note: keep the project name lower case only for easy linux packaging support
-project (noobsengine VERSION 0.0.1)
+project (noobsEngine VERSION 0.0.1)
 set(VERSION_TYPE "beta" CACHE STRING "version type" FORCE)
 site_name(VERSION_HOST) # read hostname to VERSION_HOST
 set(VERSION_HOST "${VERSION_HOST}" CACHE STRING "host of build" FORCE)
@@ -32,6 +32,8 @@ option(MEASURE_ALL "When enabled all commands will be passed through time comman
 if(MEASURE_ALL)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "time")
 endif()
+
+cmake_policy(SET CMP0079 NEW)
 
 #-------------------------------------------------------------------------------
 # Set default install location to dist folder in build dir

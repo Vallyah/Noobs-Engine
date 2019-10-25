@@ -58,9 +58,9 @@ target_include_directories(noobsEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries (noobsEngine PRIVATE Threads::Threads)
 
 if(APPLE)
-    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "exampleApp")
-    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.exampleApp.exampleApp")
-    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_ICON_FILE exampleApp.icns)
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "noobsEngine")
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.noobsEngine.noobsEngine")
+    set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_ICON_FILE noobsEngine.icns)
     set_target_properties(noobsEngine PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/packaging/MacOSXBundleInfo.plist.in)
     set_source_files_properties(${PROJECT_SOURCE_DIR}/packaging/noobsEngine.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
@@ -70,7 +70,7 @@ install(TARGETS noobsEngine
     RUNTIME DESTINATION bin)
 
 # Using macro from cmake/cleanCpppExtensions.cpp included on the top
-# Provides noobsEngine-run and exampleApp-dbg
+# Provides noobsEngine-run and noobsEngine-dbg
 addRunAndDebugTargets(noobsEngine)
 
 # short convenience target from cmake/cleanCpppExtensions.cpp
@@ -114,6 +114,7 @@ add_custom_target(run DEPENDS noobsEngine-run)
 # find_package(CURL REQUIRED)
 # target_link_libraries (noobsEngine PRIVATE CURL::libcurl)
 
+target_link_libraries (noobsEngine PRIVATE GLFW)
 #------------------------------------------------------------------------------
 # Unit tests
 

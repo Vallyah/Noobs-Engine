@@ -36,6 +36,12 @@ ExternalHeaderOnly_Add(Catch
 #     "https://github.com/gabime/spdlog.git" "v1.x" "include")
 
 #------------------------------------------------------------------------------
+# target_link_libraries (noobsEngine PRIVATE GLFW)
+# #include <GLFW/glfw3.h>
+ExternalHeaderOnly_Add(GLFW
+    "https://github.com/glfw/glfw" "master" "include")
+
+#------------------------------------------------------------------------------
 # target_link_libraries (exampleApp PRIVATE doctest)
 # #include <doctest.h>
 # ExternalHeaderOnly_Add("DocTest"

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include <GLFW/glfw3.h>
 #include "SomeClass.h"
 #include "version.h"
 
