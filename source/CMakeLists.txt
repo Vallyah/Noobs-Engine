@@ -50,8 +50,6 @@ endif()
 add_executable(noobsEngine MACOSX_BUNDLE
     ${ICON_RESOURCE}
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
-    SomeClass.cpp
-    SomeClass.h
     main.cpp)
 add_dependencies(noobsEngine versionFileTouchForRebuild) # We want precise time of build in version
 target_include_directories(noobsEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -99,10 +97,10 @@ add_custom_target(run DEPENDS noobsEngine-run)
 # set_property(TARGET exampleLibrary PROPERTY CXX_STANDARD 14) # we want C++14
 
 # How to include and link OpenGL and GLUT libraries
-# find_package(OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
 # find_package(GLUT REQUIRED)
-# target_include_directories(noobsEngine PRIVATE SYSTEM ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} )
-# target_link_libraries(noobsEngine PRIVATE ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+target_include_directories(noobsEngine PRIVATE SYSTEM ${OPENGL_INCLUDE_DIRS} )
+target_link_libraries(noobsEngine PRIVATE ${OPENGL_LIBRARIES} )
 
 # How to use some other standard packages
 # find_package(ZLIB REQUIRED) 
@@ -114,7 +112,7 @@ add_custom_target(run DEPENDS noobsEngine-run)
 # find_package(CURL REQUIRED)
 # target_link_libraries (noobsEngine PRIVATE CURL::libcurl)
 
-target_link_libraries (noobsEngine PRIVATE GLFW)
+target_link_libraries (noobsEngine PRIVATE glfw)
 target_link_libraries (noobsEngine PRIVATE GLAD)
 #------------------------------------------------------------------------------
 # Unit tests

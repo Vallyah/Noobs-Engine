@@ -71,7 +71,7 @@ endmacro()
 
 macro(ExternalDownloadNowGit LIBNAME REPOSITORY GIT_TAG)
 
-    set(${LIBNAME}_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${LIBNAME}/src/${LIBNAME}_download/)
+    set(${LIBNAME}_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${LIBNAME}/)
 
     # clone repository if not done
     if(IS_DIRECTORY ${${LIBNAME}_SOURCE_DIR})
@@ -80,11 +80,11 @@ macro(ExternalDownloadNowGit LIBNAME REPOSITORY GIT_TAG)
         message(STATUS "Clonning: ${REPOSITORY}")
         execute_process(
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            COMMAND ${GIT_EXECUTABLE} clone --recursive ${REPOSITORY} ${LIBNAME}/src/${LIBNAME}_download
+            COMMAND ${GIT_EXECUTABLE} clone --recursive ${REPOSITORY} ${LIBNAME}/
             )
         # switch to target TAG and update submodules
         execute_process(
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${LIBNAME}/src/${LIBNAME}_download
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${LIBNAME}/
             COMMAND ${GIT_EXECUTABLE} reset --hard origin/${GIT_TAG}
             COMMAND ${GIT_EXECUTABLE} submodule update --init --force --recursive --remote --merge
             )

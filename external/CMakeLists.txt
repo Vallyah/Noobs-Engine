@@ -38,14 +38,18 @@ ExternalHeaderOnly_Add(Catch
 #------------------------------------------------------------------------------
 # target_link_libraries (noobsEngine PRIVATE GLFW)
 # #include <GLFW/glfw3.h>
-ExternalHeaderOnly_Add(GLFW
-    "https://github.com/glfw/glfw" "master" "include")
+ExternalDownloadNowGit(GLFW
+    https://github.com/glfw/glfw origin/master)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(${GLFW_SOURCE_DIR})
     
 #------------------------------------------------------------------------------
 # target_link_libraries (noobsEngine PRIVATE GLAD)
 # #include <glad/glad.h>
-add_library(GLAD INTERFACE)
-    target_include_directories(GLAD SYSTEM INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/Glad/include)
+add_library(GLAD STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/src/glad.c)
+    target_include_directories(GLAD SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/include)
 
 #------------------------------------------------------------------------------
 # target_link_libraries (exampleApp PRIVATE doctest)
