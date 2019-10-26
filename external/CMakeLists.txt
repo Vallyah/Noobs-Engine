@@ -51,6 +51,13 @@ add_subdirectory(${GLFW_SOURCE_DIR})
 add_library(GLAD STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/src/glad.c)
     target_include_directories(GLAD SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/include)
 
+# target_link_libraries (noobsEngine PRIVATE glm)
+# #include <glm/glm.hpp>
+# #include <glm/gtc/matrix_transform.hpp>
+# #include <glm/gtc/type_ptr.hpp>
+ExternalHeaderOnly_Add(glm
+    "https://github.com/g-truc/glm.git" "master" "")
+
 #------------------------------------------------------------------------------
 # target_link_libraries (exampleApp PRIVATE doctest)
 # #include <doctest.h>
