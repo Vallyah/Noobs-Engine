@@ -47,9 +47,19 @@ elseif (APPLE) #osx icon ressource file, provided from /packaging directory
     set(ICON_RESOURCE "${PROJECT_SOURCE_DIR}/packaging/noobsEngine.icns")
 endif()
 
+file(GLOB_RECURSE utils_sources  ${CMAKE_CURRENT_SOURCE_DIR}/Utils/*.cpp)
+file(GLOB_RECURSE utils_headers  ${CMAKE_CURRENT_SOURCE_DIR}/Utils/*.h)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Utils)
+
+SOURCE_GROUP("Utils Sources" FILES ${utils_sources})
+SOURCE_GROUP("Utils Headers" FILES ${utils_headers})
+
 add_executable(noobsEngine MACOSX_BUNDLE
     ${ICON_RESOURCE}
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
+    ${utils_sources}
+    ${utils_headers}
     main.cpp)
 add_dependencies(noobsEngine versionFileTouchForRebuild) # We want precise time of build in version
 target_include_directories(noobsEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -67,7 +77,7 @@ install(TARGETS noobsEngine
     BUNDLE DESTINATION "."
     RUNTIME DESTINATION bin)
 
-# Using macro from cmake/cleanCpppExtensions.cpp included on the top
+# Using macro from cmake/cleanCppExtensions.cpp included on the top
 # Provides noobsEngine-run and noobsEngine-dbg
 addRunAndDebugTargets(noobsEngine)
 

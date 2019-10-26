@@ -7,6 +7,10 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+#include "Utils/shader.h"
+#include "Utils/simpleMesh.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -48,7 +52,7 @@ int main(int argc, char const* argv[])
     // process rest of the free arguments. EG. file list, word list
     for (; argIt < argc; ++argIt)
         std::cout << argv[argIt] << std::endl;
-    
+
 
     // glfw: initialize and configure
     // ------------------------------
@@ -79,7 +83,34 @@ int main(int argc, char const* argv[])
     {
         std::cerr << "Failed to initialize GLAD" << std::endl;
         return -1;
-    }    
+    }
+
+    /* Create shader program */
+    /*************************/
+    Shader *programcolor = new Shader("../data/Shaders/vertex.glsl",
+                                      "../data/Shaders/fragment.glsl");
+
+    /* Create geometry */
+    /*******************/
+    std::vector<glm::vec3> vertices = {
+        glm::vec3(-0.5f, -0.5f, 0.0f), // left
+        glm::vec3(0.5f, -0.5f, 0.0f), // right
+        glm::vec3(0.0f,  0.5f, 0.0f)  // top
+    };
+
+    std::vector<glm::vec3> normals = {
+       glm::vec3(0.0f, 0.0f, -1.0f),
+       glm::vec3(0.0f, 0.0f, -1.0f),
+       glm::vec3(0.0f, 0.0f, -1.0f)
+    };
+
+    std::vector<glm::vec2> uvs = {};
+
+    std::vector<unsigned int> indices = { 0, 1, 2 };
+    std::vector<Texture> textures = {};
+
+    SimpleMesh mesh = SimpleMesh(vertices, normals, uvs, indices, textures);
+
 
     // render loop
     // -----------
@@ -88,9 +119,17 @@ int main(int argc, char const* argv[])
         // input
         // -----
         processInput(window);
-        
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        /* Draw */
+        /********/
+        programcolor->bind();
+        programcolor->setVec3("diffuse", glm::vec3(0.1, 1, 0.1));
+        mesh.Draw(programcolor);
+
+        programcolor->unbind();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -116,7 +155,7 @@ void processInput(GLFWwindow *window)
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
+    // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
