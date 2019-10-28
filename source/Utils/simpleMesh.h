@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <glm/glm.hpp>
 
@@ -27,7 +28,7 @@ class SimpleMesh {
         SimpleMesh(std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals,
                    std::vector<glm::vec2> uvs, std::vector<unsigned int> indices,
                    std::vector<Texture> textures);
-        void Draw(Shader *shader);
+        void Draw(std::shared_ptr<Shader> shader);
 
     private:
         unsigned int vao, vbo, nbo, uvbo, ebo;

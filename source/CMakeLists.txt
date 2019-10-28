@@ -60,6 +60,8 @@ add_executable(noobsEngine MACOSX_BUNDLE
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
     ${utils_sources}
     ${utils_headers}
+    scene.h
+    scene.cpp
     main.cpp)
 add_dependencies(noobsEngine versionFileTouchForRebuild) # We want precise time of build in version
 target_include_directories(noobsEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

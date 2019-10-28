@@ -9,8 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "Utils/shader.h"
-#include "Utils/simpleMesh.h"
+#include "scene.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -67,7 +66,7 @@ int main(int argc, char const* argv[])
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Noob's Engine", NULL, NULL);
     if (window == NULL)
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -85,32 +84,7 @@ int main(int argc, char const* argv[])
         return -1;
     }
 
-    /* Create shader program */
-    /*************************/
-    Shader *programcolor = new Shader("../data/Shaders/vertex.glsl",
-                                      "../data/Shaders/fragment.glsl");
-
-    /* Create geometry */
-    /*******************/
-    std::vector<glm::vec3> vertices = {
-        glm::vec3(-0.5f, -0.5f, 0.0f), // left
-        glm::vec3(0.5f, -0.5f, 0.0f), // right
-        glm::vec3(0.0f,  0.5f, 0.0f)  // top
-    };
-
-    std::vector<glm::vec3> normals = {
-       glm::vec3(0.0f, 0.0f, -1.0f),
-       glm::vec3(0.0f, 0.0f, -1.0f),
-       glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-
-    std::vector<glm::vec2> uvs = {};
-
-    std::vector<unsigned int> indices = { 0, 1, 2 };
-    std::vector<Texture> textures = {};
-
-    SimpleMesh mesh = SimpleMesh(vertices, normals, uvs, indices, textures);
-
+    Scene scene;
 
     // render loop
     // -----------
@@ -123,13 +97,7 @@ int main(int argc, char const* argv[])
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /* Draw */
-        /********/
-        programcolor->bind();
-        programcolor->setVec3("diffuse", glm::vec3(0.1, 1, 0.1));
-        mesh.Draw(programcolor);
-
-        programcolor->unbind();
+        scene.Draw();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

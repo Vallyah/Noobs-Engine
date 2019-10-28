@@ -44,7 +44,7 @@ void SimpleMesh::setup()
     glBindVertexArray(0);
 }
 
-void SimpleMesh::Draw(Shader *shader)
+void SimpleMesh::Draw(std::shared_ptr<Shader> shader)
 {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
