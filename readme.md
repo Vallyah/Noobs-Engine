@@ -1,55 +1,7 @@
-# cleanCppProject
+# Noob's Engine
 
-![Build Status](https://travis-ci.org/kracejic/cleanCppProject.svg?branch=master)
-
-This is an empty frame for project in C++. It should help to start a new project without caring much about project/build environment setup.
-
-## Features
-
-* Modern, simple CMake build scripts, divided into several components for readability.
-* Sane and simple targets for everything (see *targets* section).
-* CPack script which can produce **deb**, **rpm**, **windows installer**, **bundle app**, **dmg** and various compressed packages.
-* Tests via CTest.
-* Unit tests via Catch.
-* Documentation generation via Doxygen (code + wiki + UML diagrams with Graphviz and PlanUML).
-* Static analysis support (clang-tidy, cppcheck).
-* Dynamic analysis helpers via sanitizers (see cmake/sanitizers.cmake).
-* Works with your favourite linux distro, Windows and MacOS.
-* Gitlab CI and Travis CI configuration examples.
-* Support for gold linker for faster linking time.
-* Helpers for adding external dependencies downloaded during configuration or build.
-    * see `external/CMakeLists.txt` and `cmake/cleanCppExtension.cmake`
-
-## Important pages
-
-* [Design document](doc/design.md)
-* [List of todos (doxygen only)](./todo.html)
-* [Basic directory structure](doc/directoryStructure.md)
-* [How to start working](doc/start_working.md)
-
-\todo see how todo works
-
-## How to convert this to your new project
-
-~~~
-git clone https://github.com/kracejic/cleanCppProject.git yourNewProject
-cd yourNewProject
-mv .git .git-cleanCppProject
-git init
-git add .
-git commit -m "first commit"
-~~~
-
-More in [How to start working](doc/start_working.md).
-
-## How to keep the link with us 
-
-We are improving this repo on a regular basis, if you want to get more from us, try to pull the main repo.
-
-~~~
-cd yourNewProject/ 
-git pull --git-dir='.git-cleanCppProject'
-~~~
+This is a little engine made to implement Shadow Maps, Prefiltered Shadow Maps and tesselation in OpenGL.
+This project started with cleanCppProject (https://github.com/kracejic/cleanCppProject)
 
 ## Building instructions
 
