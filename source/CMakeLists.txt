@@ -47,19 +47,19 @@ elseif (APPLE) #osx icon ressource file, provided from /packaging directory
     set(ICON_RESOURCE "${PROJECT_SOURCE_DIR}/packaging/noobsEngine.icns")
 endif()
 
-file(GLOB_RECURSE utils_sources  ${CMAKE_CURRENT_SOURCE_DIR}/Utils/*.cpp)
-file(GLOB_RECURSE utils_headers  ${CMAKE_CURRENT_SOURCE_DIR}/Utils/*.h)
+file(GLOB_RECURSE sceneutils_sources  ${CMAKE_CURRENT_SOURCE_DIR}/SceneUtils/*.cpp)
+file(GLOB_RECURSE sceneutils_headers  ${CMAKE_CURRENT_SOURCE_DIR}/SceneUtils/*.h)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Utils)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SceneUtils)
 
-SOURCE_GROUP("Utils Sources" FILES ${utils_sources})
-SOURCE_GROUP("Utils Headers" FILES ${utils_headers})
+SOURCE_GROUP("SceneUtils Sources" FILES ${sceneutils_sources})
+SOURCE_GROUP("SceneUtils Headers" FILES ${sceneutils_headers})
 
 add_executable(noobsEngine MACOSX_BUNDLE
     ${ICON_RESOURCE}
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
-    ${utils_sources}
-    ${utils_headers}
+    ${sceneutils_sources}
+    ${sceneutils_headers}
     scene.h
     scene.cpp
     main.cpp)

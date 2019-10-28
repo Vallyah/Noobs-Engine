@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "Utils/shader.h"
-#include "Utils/simpleMesh.h"
+#include "SceneUtils/shader.h"
+#include "SceneUtils/simpleMesh.h"
 
 class Scene {
 public:
