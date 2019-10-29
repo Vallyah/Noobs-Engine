@@ -29,6 +29,8 @@ Scene::Scene()
     std::vector<Texture> textures = {};
 
     _mesh = std::make_unique<SimpleMesh>(vertices, normals, uvs, indices, textures);
+
+    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
 }
 
 void Scene::Draw()
@@ -40,6 +42,4 @@ void Scene::Draw()
     _mesh->Draw(_program);
 
     _program->unbind();
-    
-    return;
 }
