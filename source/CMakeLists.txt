@@ -127,6 +127,7 @@ target_link_libraries(noobsEngine PRIVATE ${OPENGL_LIBRARIES} )
 target_link_libraries (noobsEngine PRIVATE glfw)
 target_link_libraries (noobsEngine PRIVATE GLAD)
 target_link_libraries (noobsEngine PRIVATE glm)
+target_link_libraries (noobsEngine PRIVATE assimp)
 
 #------------------------------------------------------------------------------
 # Unit tests

@@ -11,7 +11,7 @@ target_include_directories(unittests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_link_libraries(unittests PRIVATE Catch)
 
 # convenience target for running only the unit tests
-add_custom_target(unit
+add_custom_target(unit_only
     #this way we can use faux data from /test dir (if we have any):
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/test
     COMMAND $<TARGET_FILE:unittests>

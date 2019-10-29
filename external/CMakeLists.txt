@@ -50,14 +50,24 @@ add_subdirectory(${GLFW_SOURCE_DIR})
 # #include <glad/glad.h>
 add_library(GLAD STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/src/glad.c)
     target_include_directories(GLAD SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/include)
-
+    
+#------------------------------------------------------------------------------
 # target_link_libraries (noobsEngine PRIVATE glm)
 # #include <glm/glm.hpp>
 # #include <glm/gtc/matrix_transform.hpp>
 # #include <glm/gtc/type_ptr.hpp>
 ExternalHeaderOnly_Add(glm
     "https://github.com/g-truc/glm.git" "master" "")
+    
+#------------------------------------------------------------------------------
 
+# target_link_libraries (noobsEngine PRIVATE assimp)
+# #include <assimp/Importer.hpp>
+# #include <assimp/scene.h>
+# #include <assimp/postprocess.h>
+ExternalDownloadNowGit(assimp
+    https://github.com/assimp/assimp assimp_5.0_release)
+add_subdirectory(${assimp_SOURCE_DIR})
 #------------------------------------------------------------------------------
 # target_link_libraries (exampleApp PRIVATE doctest)
 # #include <doctest.h>
