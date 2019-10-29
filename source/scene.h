@@ -3,21 +3,39 @@
 
 #include <memory>
 
+#include <glm/glm.hpp>
+
 #include "SceneUtils/shader.h"
 #include "SceneUtils/simpleMesh.h"
 #include "SceneUtils/camera.h"
 
 class Scene {
 public:
-    Scene();
+    Scene(const unsigned int width, const unsigned int height);
     ~Scene() {};
 
     void Draw();
 
+    void ProcessKeyboard(Camera_Movement direction, float deltaTime);
+    void ProcessKeyboard(const char k);
+    void ProcessMouseMovement(double xpos, double ypos);
+    void ProcessMouseScroll(double xoffset, double yoffset);
+
 private:
+    unsigned int scr_width;
+    unsigned int scr_height;
+
     std::shared_ptr<Shader> _program;
     std::unique_ptr<SimpleMesh> _mesh;
+
     std::unique_ptr<Camera> _camera;
+    float lastX;
+    float lastY;
+    bool firstMouse;
+
+    glm::mat4 _model;
+    glm::mat4 _view;
+    glm::mat4 _projection;
 };
 
 #endif
