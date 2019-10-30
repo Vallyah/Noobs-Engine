@@ -2,6 +2,7 @@ build*/
 external/*
 !external/CMakeLists.txt
 !external/Glad
+!external/Stb
 *.sublime-workspace
 .tags
 tags

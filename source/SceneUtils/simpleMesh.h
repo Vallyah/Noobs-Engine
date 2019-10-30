@@ -11,27 +11,38 @@
 
 /* Largely inspired from learnopengl.com/Model-Loading/Mesh */
 
+struct Vertex {
+    // position
+    glm::vec3 Position;
+    // normal
+    glm::vec3 Normal;
+    // texCoords
+    glm::vec2 TexCoords;
+    // tangent
+    glm::vec3 Tangent;
+    // bitangent
+    glm::vec3 Bitangent;
+};
+
 struct Texture {
     unsigned int id;
     std::string type;
+    std::string path;
 };
 
 class SimpleMesh {
-    public:
-        std::vector<glm::vec3> _vertices;
-        std::vector<glm::vec3> _normals;
-        std::vector<glm::vec2> _uvs;
+public:
+    SimpleMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
+               std::vector<Texture> textures);
+    ~SimpleMesh() {}
+    void Draw(std::shared_ptr<Shader> shader);
 
-        std::vector<unsigned int> _indices;
-        std::vector<Texture> _textures;
+private:
+    std::vector<Vertex> _vertices;
+    std::vector<unsigned int> _indices;
+    std::vector<Texture> _textures;
 
-        SimpleMesh(std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals,
-                   std::vector<glm::vec2> uvs, std::vector<unsigned int> indices,
-                   std::vector<Texture> textures);
-        void Draw(std::shared_ptr<Shader> shader);
-
-    private:
-        unsigned int vao, vbo, nbo, uvbo, ebo;
-        void setup();
+    unsigned int vao, vbo, ebo;
+    void setup();
 };
 #endif

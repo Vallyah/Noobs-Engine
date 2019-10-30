@@ -14,24 +14,21 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
     /* Create geometry */
     /*******************/
-    std::vector<glm::vec3> vertices = {
-        glm::vec3(-0.5f, -0.5f, 0.0f), // left
-        glm::vec3(0.5f, -0.5f, 0.0f), // right
-        glm::vec3(0.0f,  0.5f, 0.0f)  // top
-    };
+    std::vector<Vertex> vertices(4);
+    vertices[0].Position = glm::vec3(-50.0f, 0.0f, -50.0f);
+    vertices[0].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[1].Position = glm::vec3(50.0f, 0.0f, -50.0f);
+    vertices[1].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[2].Position = glm::vec3(50.0f, 0.0f, 50.0f);
+    vertices[2].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[3].Position = glm::vec3(-50.0f, 0.0f, 50.0f);
+    vertices[3].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    std::vector<glm::vec3> normals = {
-       glm::vec3(0.0f, 0.0f, -1.0f),
-       glm::vec3(0.0f, 0.0f, -1.0f),
-       glm::vec3(0.0f, 0.0f, -1.0f)
-    };
-
-    std::vector<glm::vec2> uvs = {};
-
-    std::vector<unsigned int> indices = { 0, 1, 2 };
+    std::vector<unsigned int> indices = { 0, 1, 2,
+                                          0, 2, 3 };
     std::vector<Texture> textures = {};
 
-    _mesh = std::make_unique<SimpleMesh>(vertices, normals, uvs, indices, textures);
+    _mesh = std::make_unique<SimpleMesh>(vertices, indices, textures);
 
     _camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 1.0f));
     lastX = scr_width / 2.0f;
@@ -39,6 +36,7 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     firstMouse = true;
 
     _model = glm::mat4(1.0f); // Identity
+    _model = glm::translate(_model, glm::vec3(0.0f, -2.0f, 0.0f));
 }
 
 void Scene::Draw()

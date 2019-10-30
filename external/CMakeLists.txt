@@ -44,13 +44,19 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(${GLFW_SOURCE_DIR})
-    
+
 #------------------------------------------------------------------------------
 # target_link_libraries (noobsEngine PRIVATE GLAD)
 # #include <glad/glad.h>
 add_library(GLAD STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/src/glad.c)
     target_include_directories(GLAD SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/include)
-    
+
+#------------------------------------------------------------------------------
+# target_link_libraries (noobsEngine PRIVATE stb)
+# #include <stb_image.h>
+add_library(stb STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Stb/src/stb_image.cpp)
+target_include_directories(stb SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Stb/include)
+
 #------------------------------------------------------------------------------
 # target_link_libraries (noobsEngine PRIVATE glm)
 # #include <glm/glm.hpp>
@@ -58,7 +64,7 @@ add_library(GLAD STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Glad/src/glad.c)
 # #include <glm/gtc/type_ptr.hpp>
 ExternalHeaderOnly_Add(glm
     "https://github.com/g-truc/glm.git" "master" "")
-    
+
 #------------------------------------------------------------------------------
 
 # target_link_libraries (noobsEngine PRIVATE assimp)

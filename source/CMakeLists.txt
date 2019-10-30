@@ -115,9 +115,9 @@ target_include_directories(noobsEngine PRIVATE SYSTEM ${OPENGL_INCLUDE_DIRS} )
 target_link_libraries(noobsEngine PRIVATE ${OPENGL_LIBRARIES} )
 
 # How to use some other standard packages
-# find_package(ZLIB REQUIRED) 
+# find_package(ZLIB REQUIRED)
 # target_link_libraries (noobsEngine PRIVATE ZLIB::ZLIB)
-# 
+#
 # find_package(OpenSSL REQUIRED)
 # target_link_libraries (noobsEngine PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 #
@@ -126,6 +126,7 @@ target_link_libraries(noobsEngine PRIVATE ${OPENGL_LIBRARIES} )
 
 target_link_libraries (noobsEngine PRIVATE glfw)
 target_link_libraries (noobsEngine PRIVATE GLAD)
+target_link_libraries (noobsEngine PRIVATE stb)
 target_link_libraries (noobsEngine PRIVATE glm)
 target_link_libraries (noobsEngine PRIVATE assimp)
 
