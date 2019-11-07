@@ -124,11 +124,6 @@ int main(int argc, char const* argv[])
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (wireframe_enabled)
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        else
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
         scene->Draw();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -147,15 +142,21 @@ int main(int argc, char const* argv[])
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
+    // press escape to close window
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
+    // press W for wireframe mode and F for filled mode
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        wireframe_enabled = !wireframe_enabled;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+    // press R to refresh scene shaders
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
         scene->ProcessKeyboard('r');
 
+    // press arrow keys to move camera
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         scene->ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
