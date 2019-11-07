@@ -12,17 +12,17 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     _program = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
                                         "../data/Shaders/fragment.glsl");
 
-    /* Create geometry */
-    /*******************/
+    /* Create geometry for plan */
+    /****************************/
     std::vector<Vertex> vertices(4);
     vertices[0].Position = glm::vec3(-50.0f, 0.0f, -50.0f);
-    vertices[0].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[0].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
     vertices[1].Position = glm::vec3(50.0f, 0.0f, -50.0f);
-    vertices[1].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[1].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
     vertices[2].Position = glm::vec3(50.0f, 0.0f, 50.0f);
-    vertices[2].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[2].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
     vertices[3].Position = glm::vec3(-50.0f, 0.0f, 50.0f);
-    vertices[3].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[3].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
 
     std::vector<unsigned int> indices = { 0, 1, 2,
                                           0, 2, 3 };
@@ -30,35 +30,58 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
     _mesh = std::make_unique<SimpleMesh>(vertices, indices, textures);
 
-    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 1.0f));
+    _planMat = glm::mat4(1.0f); // Identity
+    _planMat = glm::translate(_planMat, glm::vec3(0.0f, -2.0f, 0.0f));
+
+    /* Create watch tower model */
+    /****************************/
+    _towermodel = std::make_unique<Model>("../data/Objects/WoodenTower/wooden watch tower2.obj");
+
+    _towerMat = glm::mat4(1.0f); // Identity
+    _towerMat = glm::translate(_towerMat, glm::vec3(0.0f, -2.75f, 0.0f));
+
+    /* Create camera */
+    /*****************/
+    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 5.0f, 9.0f));
     lastX = scr_width / 2.0f;
     lastY = scr_height / 2.0f;
     firstMouse = true;
-
-    _model = glm::mat4(1.0f); // Identity
-    _model = glm::translate(_model, glm::vec3(0.0f, -2.0f, 0.0f));
 }
 
 void Scene::Draw()
 {
-    /* Draw */
-    /********/
-
+    /* Build view + proj matrices */
+    /******************************/
     _view = _camera->GetViewMatrix();
     _projection = glm::perspective((_camera->getZoom()),
                 ((float) scr_width) / scr_height,
                 0.1f, 100.0f);
 
+    /* Bind shader program */
+    /***********************/
     _program->bind();
 
-    _program->setMat4("model", _model);
+    /* Set camera matrices */
+    /***********************/
     _program->setMat4("view", _view);
     _program->setMat4("projection", _projection);
 
-    _program->setVec3("diffuse", glm::vec3(0.1, 1, 0.1));
+    /* Draw plan */
+    /*************/
+    _program->setMat4("model", _planMat);
+    _program->setVec3("diffuse", glm::vec3(0.4f, 0.5f, 0.4f));
 
     _mesh->Draw(_program);
 
+    /* Draw tower */
+    /**************/
+    _program->setMat4("model", _towerMat);
+    _program->setVec3("diffuse", glm::vec3(0.7f, 0.3f, 0.0f));
+
+    _towermodel->Draw(_program);
+
+    /* Unbind shader program */
+    /*************************/
     _program->unbind();
 }
 

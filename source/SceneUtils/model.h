@@ -17,7 +17,7 @@
 class Model
 {
     public:
-        Model(char *path, bool gamma = false) : gammaCorrection(gamma)
+        Model(const char *path, bool gamma = false) : gammaCorrection(gamma)
         {
             loadModel(path);
         }

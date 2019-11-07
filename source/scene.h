@@ -8,6 +8,7 @@
 #include "SceneUtils/shader.h"
 #include "SceneUtils/simpleMesh.h"
 #include "SceneUtils/camera.h"
+#include "SceneUtils/model.h"
 
 class Scene {
 public:
@@ -27,13 +28,15 @@ private:
 
     std::shared_ptr<Shader> _program;
     std::unique_ptr<SimpleMesh> _mesh;
+    std::unique_ptr<Model> _towermodel;
 
     std::unique_ptr<Camera> _camera;
     float lastX;
     float lastY;
     bool firstMouse;
 
-    glm::mat4 _model;
+    glm::mat4 _planMat;
+    glm::mat4 _towerMat;
     glm::mat4 _view;
     glm::mat4 _projection;
 };
