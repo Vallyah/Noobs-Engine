@@ -1,8 +1,13 @@
 build*/
+
 external/*
 !external/CMakeLists.txt
 !external/Glad
 !external/Stb
+
+data/Objects/*
+!data/Objects/*.zip
+
 *.sublime-workspace
 .tags
 tags

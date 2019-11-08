@@ -30,7 +30,7 @@ private:
     std::shared_ptr<Shader> _program_lightcube;
     std::unique_ptr<SimpleMesh> _mesh;
     std::unique_ptr<SimpleMesh> _lightcube;
-    std::unique_ptr<Model> _towermodel;
+    std::unique_ptr<Model> _model;
 
     glm::vec3 _pointlight_pos;
 
@@ -41,7 +41,7 @@ private:
 
     glm::mat4 _planMat;
     glm::mat4 _lightcubeMat;
-    glm::mat4 _towerMat;
+    glm::mat4 _modelMat;
     glm::mat4 _view;
     glm::mat4 _projection;
 };

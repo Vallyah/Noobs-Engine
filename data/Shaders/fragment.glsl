@@ -21,7 +21,6 @@ void main()
     {
         Kd = texture(texture_diffuse1, uv).xyz;
         //frag_norm = texture(texture_normal1, uv).xyz;
-        //wooden tower's normal map is bad for my usage
         frag_norm = normalize(normal);
     }
     else

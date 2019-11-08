@@ -37,7 +37,7 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
     /* Create geometry for light cube */
     /**********************************/
-    _pointlight_pos = glm::vec3(0.0f, 3.5f, 0.0f);
+    _pointlight_pos = glm::vec3(0.0f, 0.7f, 4.8f);
 
     std::vector<Vertex> cube_vertices(8);
     cube_vertices[0].Position = glm::vec3(0.1f);
@@ -66,16 +66,18 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
     _lightcubeMat = glm::translate(glm::mat4(1.0f), _pointlight_pos);
 
-    /* Create watch tower model */
+    /* Create model */
     /****************************/
-    _towermodel = std::make_unique<Model>("../data/Objects/WoodenTower/wooden watch tower2.obj");
+    _model = std::make_unique<Model>("../data/Objects/Cottage/cottage.obj");
 
-    _towerMat = glm::mat4(1.0f); // Identity
-    _towerMat = glm::translate(_towerMat, glm::vec3(0.0f, -2.75f, 0.0f));
+    _modelMat = glm::mat4(1.0f); // Identity
+    _modelMat = glm::rotate(_modelMat, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    _modelMat = glm::translate(_modelMat, glm::vec3(0.0f, -2.0f, 0.0f));
+    _modelMat = glm::scale(_modelMat, glm::vec3(0.1f));
 
     /* Create camera */
     /*****************/
-    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 5.0f, 9.0f));
+    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 7.0f, 15.0f));
     lastX = scr_width / 2.0f;
     lastY = scr_height / 2.0f;
     firstMouse = true;
@@ -103,10 +105,10 @@ void Scene::Draw()
     /**************/
     _program->setVec3("dirLight.direction", glm::vec3(-0.5f, -0.5f, -0.5f));
     _program->setVec3("dirLight.ambient", glm::vec3(0.1f));
-    _program->setVec3("dirLight.diffuse", glm::vec3(0.6f));
+    _program->setVec3("dirLight.diffuse", glm::vec3(0.4f));
 
     _program->setVec3("pointLight.position", _pointlight_pos);
-    _program->setFloat("pointLight.constant", 0.0f);
+    _program->setFloat("pointLight.constant", 0.3f);
     _program->setFloat("pointLight.linear", 0.1f);
     _program->setFloat("pointLight.quadratic", 0.0f);
     _program->setVec3("pointLight.ambient", glm::vec3(0.1f));
@@ -122,11 +124,11 @@ void Scene::Draw()
 
     /* Draw tower */
     /**************/
-    _program->setMat4("model", _towerMat);
+    _program->setMat4("model", _modelMat);
     _program->setVec3("diffuse", glm::vec3(0.7f, 0.3f, 0.0f));
     _program->setInt("hasTexture", 1);
 
-    _towermodel->Draw(_program);
+    _model->Draw(_program);
 
     /* Unbind shader program */
     /*************************/
