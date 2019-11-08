@@ -16,13 +16,13 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /****************************/
     std::vector<Vertex> vertices(4);
     vertices[0].Position = glm::vec3(-50.0f, 0.0f, -50.0f);
-    vertices[0].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
+    vertices[0].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
     vertices[1].Position = glm::vec3(50.0f, 0.0f, -50.0f);
-    vertices[1].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
+    vertices[1].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
     vertices[2].Position = glm::vec3(50.0f, 0.0f, 50.0f);
-    vertices[2].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
+    vertices[2].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
     vertices[3].Position = glm::vec3(-50.0f, 0.0f, 50.0f);
-    vertices[3].Normal = glm::vec3(0.0f, -1.0f, 0.0f);
+    vertices[3].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
     std::vector<unsigned int> indices = { 0, 1, 2,
                                           0, 2, 3 };
@@ -69,7 +69,8 @@ void Scene::Draw()
     /* Draw plan */
     /*************/
     _program->setMat4("model", _planMat);
-    _program->setVec3("diffuse", glm::vec3(0.4f, 0.5f, 0.4f));
+    _program->setVec3("diffuse", glm::vec3(0.3f, 0.6f, 0.2f));
+    _program->setInt("hasTexture", 0);
 
     _mesh->Draw(_program);
 
@@ -77,6 +78,7 @@ void Scene::Draw()
     /**************/
     _program->setMat4("model", _towerMat);
     _program->setVec3("diffuse", glm::vec3(0.7f, 0.3f, 0.0f));
+    _program->setInt("hasTexture", 1);
 
     _towermodel->Draw(_program);
 
