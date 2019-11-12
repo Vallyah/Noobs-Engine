@@ -84,7 +84,7 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /**********************/
 
     _screenquad = std::make_unique<ScreenQuad>();
-    
+
     /* Create camera */
     /*****************/
     _camera = std::make_unique<Camera>(glm::vec3(0.0f, 7.0f, 15.0f),
@@ -95,25 +95,33 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
     /* Create Lights */
     /*****************/
-    _dirlight = std::make_unique<DirectionalLight>(glm::vec3(-0.5f), glm::vec3(0.1f),
-                                                   glm::vec3(0.4f), glm::vec3(15.0f));
+    _dirlight = std::make_unique<DirectionalLight>(glm::vec3(-0.5f, -0.5f, 0.5f),
+                                                   glm::vec3(0.1f), glm::vec3(0.4f),
+                                                   glm::vec3(7.0f, 7.0f, -7.0f));
 }
 
 void Scene::Draw()
 {
     // render scene for shadow maps
-    /* glViewport(0, 0, 1024, 1024); */
-    /* glBindFramebuffer(GL_FRAMEBUFFER, _dirlight->fbo()); */
-    /* glClear(GL_DEPTH_BUFFER_BIT); */
-    /* RenderScene_depthMaps(); */
-    /* glBindFramebuffer(GL_FRAMEBUFFER, 0); */
+    glViewport(0, 0, 1024, 1024);
+    glBindFramebuffer(GL_FRAMEBUFFER, _dirlight->fbo());
+    glClear(GL_DEPTH_BUFFER_BIT);
+    RenderScene_depthMaps();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    // render scene normally
+    // debug with screen quad
     glViewport(0, 0, scr_width, scr_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    _program_quad->bind();
+    _screenquad->Draw(_dirlight->depthMap());
+    _program_quad->unbind();
+
+    // render scene normally
+    /* glViewport(0, 0, scr_width, scr_height); */
+    /* glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); */
     /* glBindTexture(GL_TEXTURE_2D, _dirlight->depthMap()); */
 
-    RenderScene_normal();
+    /* RenderScene_normal(); */
 }
 
 void Scene::RenderScene_normal()

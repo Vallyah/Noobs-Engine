@@ -14,7 +14,7 @@ ScreenQuad::ScreenQuad()
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
-    
+
     // screen quad VAO
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
