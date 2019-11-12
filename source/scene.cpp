@@ -22,13 +22,13 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /* Create geometry for plan */
     /****************************/
     std::vector<Vertex> vertices(4);
-    vertices[0].Position = glm::vec3(-50.0f, 0.0f, -50.0f);
+    vertices[0].Position = glm::vec3(-12.0f, 0.0f, -12.0f);
     vertices[0].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[1].Position = glm::vec3(50.0f, 0.0f, -50.0f);
+    vertices[1].Position = glm::vec3(12.0f, 0.0f, -12.0f);
     vertices[1].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[2].Position = glm::vec3(50.0f, 0.0f, 50.0f);
+    vertices[2].Position = glm::vec3(12.0f, 0.0f, 12.0f);
     vertices[2].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[3].Position = glm::vec3(-50.0f, 0.0f, 50.0f);
+    vertices[3].Position = glm::vec3(-12.0f, 0.0f, 12.0f);
     vertices[3].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
     std::vector<unsigned int> indices = { 0, 1, 2,
@@ -110,18 +110,18 @@ void Scene::Draw()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // debug with screen quad
-    glViewport(0, 0, scr_width, scr_height);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _program_quad->bind();
-    _screenquad->Draw(_dirlight->depthMap());
-    _program_quad->unbind();
-
-    // render scene normally
     /* glViewport(0, 0, scr_width, scr_height); */
     /* glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); */
-    /* glBindTexture(GL_TEXTURE_2D, _dirlight->depthMap()); */
+    /* _program_quad->bind(); */
+    /* _screenquad->Draw(_dirlight->depthMap()); */
+    /* _program_quad->unbind(); */
 
-    /* RenderScene_normal(); */
+    // render scene normally
+    glViewport(0, 0, scr_width, scr_height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindTexture(GL_TEXTURE_2D, _dirlight->depthMap());
+
+    RenderScene_normal();
 }
 
 void Scene::RenderScene_normal()
@@ -146,6 +146,7 @@ void Scene::RenderScene_normal()
     _program->setVec3("dirLight.direction", _dirlight->direction());
     _program->setVec3("dirLight.ambient", _dirlight->ambient());
     _program->setVec3("dirLight.diffuse", _dirlight->diffuse());
+    _program->setMat4("dirlight_spacematrix", _dirlight->lightSpaceMatrix());
 
     _program->setVec3("pointLight.position", _pointlight_pos);
     _program->setFloat("pointLight.constant", 0.4f);

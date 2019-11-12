@@ -26,7 +26,7 @@ DirectionalLight::DirectionalLight(glm::vec3 direction, glm::vec3 ambient, glm::
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glm::mat4 proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 21.0f);
+    glm::mat4 proj = glm::ortho(-11.0f, 11.0f, -10.0f, 10.0f, 0.1f, 31.0f);
     glm::mat4 view = glm::lookAt(_position, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     _spaceMat = proj * view;
 }

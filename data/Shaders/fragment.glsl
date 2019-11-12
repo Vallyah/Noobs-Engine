@@ -3,6 +3,7 @@ in vec3 normal;
 in vec2 uv;
 in vec3 tangent;
 in vec3 bitan;
+in vec4 pos_dirlightspace;
 
 uniform vec3 diffuse;
 uniform bool hasTexture;
@@ -28,9 +29,8 @@ void main()
         Kd = diffuse;
         frag_norm = normalize(normal);
     }
-    vec3 result = CalcDirLight(dirLight, frag_norm, Kd);
+    float dir_shadow = ShadowCalculation(pos_dirlightspace);
+    vec3 result = CalcDirLight(dirLight, frag_norm, Kd, dir_shadow);
     result += CalcPointLight(pointLight, frag_norm, world_pos, Kd);
-//     vec3 dirlight = normalize(vec3(0.0f, 1.0f, 0.f));
-//     float diff = max(dot(frag_norm, dirlight), 0.f);
     fragColor = vec4(result, 1.0f);
 }
