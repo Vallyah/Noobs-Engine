@@ -10,6 +10,7 @@
 #include "SceneUtils/camera.h"
 #include "SceneUtils/model.h"
 #include "SceneUtils/directionalLight.h"
+#include "SceneUtils/screenQuad.h"
 
 class Scene {
 public:
@@ -28,11 +29,14 @@ private:
     unsigned int scr_height;
 
     std::shared_ptr<Shader> _program;
+    std::shared_ptr<Shader> _program_shadowmaps;
+    std::shared_ptr<Shader> _program_quad;
     std::shared_ptr<Shader> _program_lightcube;
 
     std::unique_ptr<DirectionalLight> _dirlight;
 
     std::unique_ptr<SimpleMesh> _mesh;
+    std::unique_ptr<ScreenQuad> _screenquad;
     std::unique_ptr<SimpleMesh> _lightcube;
     std::unique_ptr<Model> _model;
 
@@ -48,6 +52,9 @@ private:
     glm::mat4 _modelMat;
     glm::mat4 _view;
     glm::mat4 _projection;
+
+    void RenderScene_normal();
+    void RenderScene_depthMaps();
 };
 
 #endif

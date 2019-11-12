@@ -1,5 +1,6 @@
 #include <vector>
 
+#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -11,6 +12,10 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /*************************/
     _program = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
                                         "../data/Shaders/fragment.glsl");
+    _program_shadowmaps = std::make_shared<Shader>("../data/Shaders/vertex_shadowmap.glsl",
+                                                   "../data/Shaders/fragment_shadowmap.glsl");
+    _program_quad = std::make_shared<Shader>("../data/Shaders/vertex_quad.glsl",
+                                             "../data/Shaders/fragment_quad.glsl");
     _program_lightcube = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
                                                   "../data/Shaders/fragment_lightcube.glsl");
 
@@ -67,7 +72,7 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     _lightcubeMat = glm::translate(glm::mat4(1.0f), _pointlight_pos);
 
     /* Create model */
-    /****************************/
+    /****************/
     _model = std::make_unique<Model>("../data/Objects/Cottage/cottage.obj");
 
     _modelMat = glm::mat4(1.0f); // Identity
@@ -75,9 +80,15 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     _modelMat = glm::translate(_modelMat, glm::vec3(0.0f, -2.0f, 0.0f));
     _modelMat = glm::scale(_modelMat, glm::vec3(0.1f));
 
+    /* Create screen quad */
+    /**********************/
+
+    _screenquad = std::make_unique<ScreenQuad>();
+    
     /* Create camera */
     /*****************/
-    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 7.0f, 15.0f));
+    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 7.0f, 15.0f),
+                                       glm::vec3(0.0f, 1.0f, 0.0f), YAW, -30.0f);
     lastX = scr_width / 2.0f;
     lastY = scr_height / 2.0f;
     firstMouse = true;
@@ -90,12 +101,28 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
 void Scene::Draw()
 {
+    // render scene for shadow maps
+    /* glViewport(0, 0, 1024, 1024); */
+    /* glBindFramebuffer(GL_FRAMEBUFFER, _dirlight->fbo()); */
+    /* glClear(GL_DEPTH_BUFFER_BIT); */
+    /* RenderScene_depthMaps(); */
+    /* glBindFramebuffer(GL_FRAMEBUFFER, 0); */
+
+    // render scene normally
+    glViewport(0, 0, scr_width, scr_height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    /* glBindTexture(GL_TEXTURE_2D, _dirlight->depthMap()); */
+
+    RenderScene_normal();
+}
+
+void Scene::RenderScene_normal()
+{
     /* Build view + proj matrices */
     /******************************/
     _view = _camera->GetViewMatrix();
-    _projection = glm::perspective((_camera->getZoom()),
-                ((float) scr_width) / scr_height,
-                0.1f, 100.0f);
+    _projection = glm::perspective(_camera->getZoom(), ((float) scr_width) / scr_height,
+                                   0.1f, 100.0f);
 
     /* Bind shader program */
     /***********************/
@@ -113,8 +140,8 @@ void Scene::Draw()
     _program->setVec3("dirLight.diffuse", _dirlight->diffuse());
 
     _program->setVec3("pointLight.position", _pointlight_pos);
-    _program->setFloat("pointLight.constant", 0.3f);
-    _program->setFloat("pointLight.linear", 0.1f);
+    _program->setFloat("pointLight.constant", 0.4f);
+    _program->setFloat("pointLight.linear", 0.15f);
     _program->setFloat("pointLight.quadratic", 0.0f);
     _program->setVec3("pointLight.ambient", glm::vec3(0.1f));
     _program->setVec3("pointLight.diffuse", glm::vec3(1.0f));
@@ -148,6 +175,33 @@ void Scene::Draw()
 
     _lightcube->Draw(_program_lightcube);
     _program_lightcube->unbind();
+}
+
+void Scene::RenderScene_depthMaps()
+{
+    /* Bind shader program */
+    /***********************/
+    _program_shadowmaps->bind();
+
+    /* Set camera matrices */
+    /***********************/
+    _program_shadowmaps->setMat4("lightSpaceMatrix", _dirlight->lightSpaceMatrix());
+
+    /* Draw plan */
+    /*************/
+    _program_shadowmaps->setMat4("model", _planMat);
+
+    _mesh->Draw(_program_shadowmaps);
+
+    /* Draw model */
+    /**************/
+    _program_shadowmaps->setMat4("model", _modelMat);
+
+    _model->Draw(_program_shadowmaps);
+
+    /* Unbind shader program */
+    /*************************/
+    _program_shadowmaps->unbind();
 }
 
 void Scene::ProcessKeyboard(Camera_Movement direction, float deltaTime)
