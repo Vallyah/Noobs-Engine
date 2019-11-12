@@ -16,8 +16,10 @@ DirectionalLight::DirectionalLight(glm::vec3 direction, glm::vec3 ambient, glm::
                  SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor); 
 
     // Attach depth texture as FBO's depth buffer
     glBindFramebuffer(GL_FRAMEBUFFER, _depthMapFBO);
@@ -26,7 +28,7 @@ DirectionalLight::DirectionalLight(glm::vec3 direction, glm::vec3 ambient, glm::
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glm::mat4 proj = glm::ortho(-12.0f, 12.0f, -10.0f, 10.0f, 0.1f, 31.0f);
+    glm::mat4 proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 31.0f);
     glm::mat4 view = glm::lookAt(_position, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     _spaceMat = proj * view;
 }

@@ -22,13 +22,13 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /* Create geometry for plan */
     /****************************/
     std::vector<Vertex> vertices(4);
-    vertices[0].Position = glm::vec3(-12.0f, 0.0f, -12.0f);
+    vertices[0].Position = glm::vec3(-25.0f, 0.0f, -25.0f);
     vertices[0].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[1].Position = glm::vec3(12.0f, 0.0f, -12.0f);
+    vertices[1].Position = glm::vec3(25.0f, 0.0f, -25.0f);
     vertices[1].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[2].Position = glm::vec3(12.0f, 0.0f, 12.0f);
+    vertices[2].Position = glm::vec3(25.0f, 0.0f, 25.0f);
     vertices[2].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[3].Position = glm::vec3(-12.0f, 0.0f, 12.0f);
+    vertices[3].Position = glm::vec3(-25.0f, 0.0f, 25.0f);
     vertices[3].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
     std::vector<unsigned int> indices = { 0, 1, 2,
@@ -106,7 +106,9 @@ void Scene::Draw()
     glViewport(0, 0, 1024, 1024);
     glBindFramebuffer(GL_FRAMEBUFFER, _dirlight->fbo());
     glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_FRONT);
     RenderScene_depthMaps();
+    glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // debug with screen quad
