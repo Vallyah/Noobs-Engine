@@ -81,6 +81,11 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     lastX = scr_width / 2.0f;
     lastY = scr_height / 2.0f;
     firstMouse = true;
+
+    /* Create Lights */
+    /*****************/
+    _dirlight = std::make_unique<DirectionalLight>(glm::vec3(-0.5f), glm::vec3(0.1f),
+                                                   glm::vec3(0.4f), glm::vec3(15.0f));
 }
 
 void Scene::Draw()
@@ -103,9 +108,9 @@ void Scene::Draw()
 
     /* Set lights */
     /**************/
-    _program->setVec3("dirLight.direction", glm::vec3(-0.5f, -0.5f, -0.5f));
-    _program->setVec3("dirLight.ambient", glm::vec3(0.1f));
-    _program->setVec3("dirLight.diffuse", glm::vec3(0.4f));
+    _program->setVec3("dirLight.direction", _dirlight->direction());
+    _program->setVec3("dirLight.ambient", _dirlight->ambient());
+    _program->setVec3("dirLight.diffuse", _dirlight->diffuse());
 
     _program->setVec3("pointLight.position", _pointlight_pos);
     _program->setFloat("pointLight.constant", 0.3f);
@@ -122,7 +127,7 @@ void Scene::Draw()
 
     _mesh->Draw(_program);
 
-    /* Draw tower */
+    /* Draw model */
     /**************/
     _program->setMat4("model", _modelMat);
     _program->setVec3("diffuse", glm::vec3(0.7f, 0.3f, 0.0f));

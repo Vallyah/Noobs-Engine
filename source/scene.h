@@ -9,6 +9,7 @@
 #include "SceneUtils/simpleMesh.h"
 #include "SceneUtils/camera.h"
 #include "SceneUtils/model.h"
+#include "SceneUtils/directionalLight.h"
 
 class Scene {
 public:
@@ -28,6 +29,9 @@ private:
 
     std::shared_ptr<Shader> _program;
     std::shared_ptr<Shader> _program_lightcube;
+
+    std::unique_ptr<DirectionalLight> _dirlight;
+
     std::unique_ptr<SimpleMesh> _mesh;
     std::unique_ptr<SimpleMesh> _lightcube;
     std::unique_ptr<Model> _model;
