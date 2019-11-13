@@ -8,7 +8,9 @@
 class Shader
 {
 public:
-    Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath);
+    //Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath);
+    Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath,
+           const std::string& geometryshaderpath = "");
     ~Shader();
 
     /// Bind this Shader (aka program).
@@ -49,22 +51,28 @@ private:
     int m_id;
     std::string m_fragmentShaderPath;
     std::string m_vertexShaderPath;
+    std::string m_geometryShaderPath;
     int m_fs;
+    int m_gs;
 
     struct ShaderProgramSource
     {
         std::string vertex;
         std::string fragment;
+        std::string geometry;
     };
 
     /// Extract Vertex shader and Fragment shader codes
-    ShaderProgramSource parseShaderFile(const std::string& vertexshaderpath, const std::string& fragmentshaderpath);
+    ShaderProgramSource parseShaderFile(const std::string& vertexshaderpath,
+                                        const std::string& fragmentshaderpath,
+                                        const std::string& geometryshaderpath);
 
     /// Compile a glsl code depending on its type.
     int compileShader(unsigned int type, const std::string& source);
 
     /// Create a shader from the vertex code and the fragment code.
-    int createShader(const std::string& vertexShader, const std::string& fragmentShader);
+    int createShader(const std::string& vertexShader, const std::string& fragmentShader,
+                     const std::string& geometryShader);
 
     /// Read a glsl file and extract code, managing includes recursively
     std::string readGLSLFile(const std::string& filepath, int level);

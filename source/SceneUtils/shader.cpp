@@ -8,13 +8,28 @@
 
 #include <glad/glad.h>
 
-Shader::Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath)
+/* Shader::Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath) */
+/* { */
+/*     m_fragmentShaderPath = fragmentshaderpath; */
+/*     m_vertexShaderPath = vertexshaderpath; */
+/*     const ShaderProgramSource shaderProgramSource = parseShaderFile(vertexshaderpath, */
+/*                                                                     fragmentshaderpath); */
+/*     m_id = createShader(shaderProgramSource.vertex, shaderProgramSource.fragment); */
+/*     unbind(); // By default, a shader is unbound after creation. */
+/* } */
+
+Shader::Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath,
+               const std::string& geometryshaderpath)
 {
     m_fragmentShaderPath = fragmentshaderpath;
     m_vertexShaderPath = vertexshaderpath;
-    const ShaderProgramSource shaderProgramSource = parseShaderFile(vertexshaderpath, fragmentshaderpath);
-    m_id = createShader(shaderProgramSource.vertex, shaderProgramSource.fragment);
-    unbind(); // By default, a shader is unbind after creation.
+    m_geometryShaderPath = geometryshaderpath;
+    const ShaderProgramSource shaderProgramSource = parseShaderFile(vertexshaderpath,
+                                                                    fragmentshaderpath,
+                                                                    geometryshaderpath);
+    m_id = createShader(shaderProgramSource.vertex, shaderProgramSource.fragment,
+                        shaderProgramSource.geometry);
+    unbind(); // By default, a shader is unbound after creation.
 }
 
 Shader::~Shader()
@@ -33,20 +48,29 @@ void Shader::unbind() const
 }
 
 Shader::ShaderProgramSource Shader::parseShaderFile(const std::string& vertexshaderpath,
-                                                    const std::string& fragmentshaderpath)
+                                                    const std::string& fragmentshaderpath,
+                                                    const std::string& geometryshaderpath)
 {
-    std::stringstream ss[2];
+    std::stringstream ss[3];
 
     // Extract Vertex Shader
     ss[0] << "#version 400 core\n\n"; // Header
     ss[0] << readGLSLFile(vertexshaderpath, 0);
 
     // Extract Fragment Shader
-
     ss[1] << "#version 400 core\n\n"; // Header
     ss[1] << readGLSLFile(fragmentshaderpath, 0);
 
-    return {ss[0].str(), ss[1].str() } ;
+    // Extract Geometry Shader
+    if (geometryshaderpath.compare(""))
+    {
+        ss[2] << "#version 400 core\n\n"; // Header
+        ss[2] << readGLSLFile(geometryshaderpath, 0);
+    }
+    /* else */
+    /*     ss[2] << ""; */
+
+    return {ss[0].str(), ss[1].str(), ss[2].str() } ;
 }
 
 int Shader::compileShader(unsigned int type, const std::string& source)
@@ -76,16 +100,23 @@ int Shader::compileShader(unsigned int type, const std::string& source)
     return shaderId;
 }
 
-int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader)
+int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader,
+                         const std::string& geometryShader)
 {
     int program = glCreateProgram();
     int vs = compileShader(GL_VERTEX_SHADER, vertexShader);
     m_fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader);
+    if (geometryShader.compare(""))
+        m_gs = compileShader(GL_GEOMETRY_SHADER, geometryShader);
+    else
+        m_gs = 0;
 
-    if (vs < 0 || m_fs < 0) return -1; // The compilation has failed..
+    if (vs < 0 || m_fs < 0 || m_gs < 0) return -1; // The compilation has failed..
 
     glAttachShader(program, vs);
     glAttachShader(program, m_fs);
+    if (geometryShader.compare(""))
+        glAttachShader(program, m_gs);
 
     glLinkProgram(program);
 
@@ -100,6 +131,8 @@ int Shader::createShader(const std::string& vertexShader, const std::string& fra
 
     glDeleteShader(vs);
     glDeleteShader(m_fs);
+    if (!geometryShader.compare(""))
+        glDeleteShader(m_gs);
 
     return program;
 }
