@@ -10,6 +10,7 @@
 #include "SceneUtils/camera.h"
 #include "SceneUtils/model.h"
 #include "SceneUtils/directionalLight.h"
+#include "SceneUtils/pointLight.h"
 #include "SceneUtils/screenQuad.h"
 
 class Scene {
@@ -34,13 +35,11 @@ private:
     std::shared_ptr<Shader> _program_lightcube;
 
     std::unique_ptr<DirectionalLight> _dirlight;
+    std::unique_ptr<PointLight> _pointlight;
 
     std::unique_ptr<SimpleMesh> _mesh;
     std::unique_ptr<ScreenQuad> _screenquad;
-    std::unique_ptr<SimpleMesh> _lightcube;
     std::unique_ptr<Model> _model;
-
-    glm::vec3 _pointlight_pos;
 
     std::unique_ptr<Camera> _camera;
     float lastX;
@@ -48,7 +47,6 @@ private:
     bool firstMouse;
 
     glm::mat4 _planMat;
-    glm::mat4 _lightcubeMat;
     glm::mat4 _modelMat;
     glm::mat4 _view;
     glm::mat4 _projection;

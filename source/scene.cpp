@@ -40,36 +40,6 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     _planMat = glm::mat4(1.0f); // Identity
     _planMat = glm::translate(_planMat, glm::vec3(0.0f, -2.0f, 0.0f));
 
-    /* Create geometry for light cube */
-    /**********************************/
-    _pointlight_pos = glm::vec3(0.0f, 0.7f, 4.8f);
-
-    std::vector<Vertex> cube_vertices(8);
-    cube_vertices[0].Position = glm::vec3(0.1f);
-    cube_vertices[1].Position = glm::vec3(0.1f, 0.1f, -0.1f);
-    cube_vertices[2].Position = glm::vec3(0.1f, -0.1f, 0.1f);
-    cube_vertices[3].Position = glm::vec3(0.1f, -0.1f, -0.1f);
-    cube_vertices[4].Position = glm::vec3(-0.1f, 0.1f, 0.1f);
-    cube_vertices[5].Position = glm::vec3(-0.1f, 0.1f, -0.1f);
-    cube_vertices[6].Position = glm::vec3(-0.1f, -0.1f, 0.1f);
-    cube_vertices[7].Position = glm::vec3(-0.1f);
-
-    std::vector<unsigned int> cube_indices = { 0, 1, 3,
-                                               0, 3, 2,
-                                               0, 5, 1,
-                                               0, 4, 5,
-                                               0, 6, 4,
-                                               0, 2, 6,
-                                               7, 3, 1,
-                                               7, 1, 5,
-                                               7, 5, 4,
-                                               7, 4, 6,
-                                               7, 2, 3,
-                                               7, 6, 2 };
-
-    _lightcube = std::make_unique<SimpleMesh>(cube_vertices, cube_indices, textures);
-
-    _lightcubeMat = glm::translate(glm::mat4(1.0f), _pointlight_pos);
 
     /* Create model */
     /****************/
@@ -98,6 +68,7 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     _dirlight = std::make_unique<DirectionalLight>(glm::vec3(-0.5f, -0.5f, 0.5f),
                                                    glm::vec3(0.1f), glm::vec3(0.4f),
                                                    glm::vec3(7.0f, 7.0f, -7.0f));
+    _pointlight = std::make_unique<PointLight>(glm::vec3(0.0f, 0.7f, 4.8f));
 }
 
 void Scene::Draw()
@@ -150,12 +121,12 @@ void Scene::RenderScene_normal()
     _program->setVec3("dirLight.diffuse", _dirlight->diffuse());
     _program->setMat4("dirlight_spacematrix", _dirlight->lightSpaceMatrix());
 
-    _program->setVec3("pointLight.position", _pointlight_pos);
-    _program->setFloat("pointLight.constant", 0.4f);
-    _program->setFloat("pointLight.linear", 0.15f);
-    _program->setFloat("pointLight.quadratic", 0.0f);
-    _program->setVec3("pointLight.ambient", glm::vec3(0.1f));
-    _program->setVec3("pointLight.diffuse", glm::vec3(1.0f));
+    _program->setVec3("pointLight.position", _pointlight->position());
+    _program->setFloat("pointLight.constant", _pointlight->constant());
+    _program->setFloat("pointLight.linear", _pointlight->linear());
+    _program->setFloat("pointLight.quadratic", _pointlight->quadratic());
+    _program->setVec3("pointLight.ambient", _pointlight->ambient());
+    _program->setVec3("pointLight.diffuse", _pointlight->diffuse());
 
     /* Draw plan */
     /*************/
@@ -182,9 +153,9 @@ void Scene::RenderScene_normal()
     _program_lightcube->bind();
     _program_lightcube->setMat4("view", _view);
     _program_lightcube->setMat4("projection", _projection);
-    _program_lightcube->setMat4("model", _lightcubeMat);
 
-    _lightcube->Draw(_program_lightcube);
+    _pointlight->DrawLightCube(_program_lightcube);
+
     _program_lightcube->unbind();
 }
 
