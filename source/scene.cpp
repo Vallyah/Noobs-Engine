@@ -74,6 +74,7 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 void Scene::Draw()
 {
     // render scene for shadow maps
+    // dirlight
     glViewport(0, 0, 1024, 1024);
     glBindFramebuffer(GL_FRAMEBUFFER, _dirlight->fbo());
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -81,6 +82,14 @@ void Scene::Draw()
     RenderScene_depthMaps();
     glCullFace(GL_BACK);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // pointlight
+    /* glBindFramebuffer(GL_FRAMEBUFFER, _pointlight->fbo()); */
+    /* glClear(GL_DEPTH_BUFFER_BIT); */
+    /* glCullFace(GL_FRONT); */
+    /* RenderScene_depthMaps(); */
+    /* glCullFace(GL_BACK); */
+    /* glBindFramebuffer(GL_FRAMEBUFFER, 0); */
 
     // debug with screen quad
     /* glViewport(0, 0, scr_width, scr_height); */

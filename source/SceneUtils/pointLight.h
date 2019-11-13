@@ -2,6 +2,7 @@
 #define POINTLIGHT_H
 
 #include <memory>
+#include <vector>
 #include <glm/glm.hpp>
 
 #include "simpleMesh.h"
@@ -23,6 +24,9 @@ public:
     inline float linear() { return _linear; };
     inline float quadratic() { return _quadratic; };
 
+    inline unsigned int fbo() { return _depthMapFBO; };
+    inline unsigned int depthmap() { return _depthCubemap; };
+
 private:
     glm::vec3 _position;
     glm::vec3 _ambient;
@@ -31,7 +35,8 @@ private:
     float _linear;
     float _quadratic;
 
-    unsigned int _depthCubeMap;
+    std::vector<glm::mat4> _transforms;
+    unsigned int _depthCubemap;
     unsigned int _depthMapFBO;
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
