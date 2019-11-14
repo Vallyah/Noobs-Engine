@@ -3,17 +3,22 @@ struct DirLight {
   
     vec3 ambient;
     vec3 diffuse;
+    vec3 specular;
 };
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 Kd)
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 Ka, vec3 Kd, vec3 Ks, float shininess)
 {
     vec3 lightDir = normalize(-light.direction);
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
     // combine results
-    vec3 ambient  = light.ambient  * Kd;
+    vec3 ambient  = light.ambient  * Ka;
     vec3 diffuse  = light.diffuse  * diff * Kd;
-    return (ambient + diffuse);
+    vec3 specular = light.specular * spec * Ks;
+    return (ambient + diffuse + specular);
 }
 
 struct PointLight {    
