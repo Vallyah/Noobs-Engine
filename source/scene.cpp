@@ -11,73 +11,41 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /*************************/
     _program = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
                                         "../data/Shaders/fragment.glsl");
-    _program_lightcube = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
-                                                  "../data/Shaders/fragment_lightcube.glsl");
 
-    /* Create geometry for plan */
-    /****************************/
-    std::vector<Vertex> vertices(4);
-    vertices[0].Position = glm::vec3(-50.0f, 0.0f, -50.0f);
-    vertices[0].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[1].Position = glm::vec3(50.0f, 0.0f, -50.0f);
-    vertices[1].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[2].Position = glm::vec3(50.0f, 0.0f, 50.0f);
-    vertices[2].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
-    vertices[3].Position = glm::vec3(-50.0f, 0.0f, 50.0f);
-    vertices[3].Normal = glm::vec3(0.0f, 1.0f, 0.0f);
+    /* Create geometry for polyhedron */
+    /**********************************/
+    std::vector<Vertex> vertices(6);
+    vertices[0].Position = glm::vec3(1.0f, 0.0f, 0.0f);
+    vertices[0].Normal = vertices[0].Position;
+    vertices[1].Position = glm::vec3(0.0f, 1.0f, 0.0f);
+    vertices[1].Normal = vertices[1].Position;
+    vertices[2].Position = glm::vec3(0.0f, 0.0f, 1.0f);
+    vertices[2].Normal = vertices[2].Position;
+    vertices[3].Position = glm::vec3(-1.0f, 0.0f, 0.0f);
+    vertices[3].Normal = vertices[3].Position;
+    vertices[4].Position = glm::vec3(0.0f, -1.0f, 0.0f);
+    vertices[4].Normal = vertices[4].Position;
+    vertices[5].Position = glm::vec3(0.0f, 0.0f, -1.0f);
+    vertices[5].Normal = vertices[5].Position;
 
     std::vector<unsigned int> indices = { 0, 1, 2,
-                                          0, 2, 3 };
+                                          0, 2, 4,
+                                          0, 4, 5,
+                                          0, 5, 1,
+                                          3, 1, 5,
+                                          3, 5, 4,
+                                          3, 4, 2,
+                                          3, 2, 1 };
+
     std::vector<Texture> textures = {};
 
     _mesh = std::make_unique<SimpleMesh>(vertices, indices, textures);
 
-    _planMat = glm::mat4(1.0f); // Identity
-    _planMat = glm::translate(_planMat, glm::vec3(0.0f, -2.0f, 0.0f));
-
-    /* Create geometry for light cube */
-    /**********************************/
-    _pointlight_pos = glm::vec3(0.0f, 0.7f, 4.8f);
-
-    std::vector<Vertex> cube_vertices(8);
-    cube_vertices[0].Position = glm::vec3(0.1f);
-    cube_vertices[1].Position = glm::vec3(0.1f, 0.1f, -0.1f);
-    cube_vertices[2].Position = glm::vec3(0.1f, -0.1f, 0.1f);
-    cube_vertices[3].Position = glm::vec3(0.1f, -0.1f, -0.1f);
-    cube_vertices[4].Position = glm::vec3(-0.1f, 0.1f, 0.1f);
-    cube_vertices[5].Position = glm::vec3(-0.1f, 0.1f, -0.1f);
-    cube_vertices[6].Position = glm::vec3(-0.1f, -0.1f, 0.1f);
-    cube_vertices[7].Position = glm::vec3(-0.1f);
-
-    std::vector<unsigned int> cube_indices = { 0, 1, 3,
-                                               0, 3, 2,
-                                               0, 5, 1,
-                                               0, 4, 5,
-                                               0, 6, 4,
-                                               0, 2, 6,
-                                               7, 3, 1,
-                                               7, 1, 5,
-                                               7, 5, 4,
-                                               7, 4, 6,
-                                               7, 2, 3,
-                                               7, 6, 2 };
-
-    _lightcube = std::make_unique<SimpleMesh>(cube_vertices, cube_indices, textures);
-
-    _lightcubeMat = glm::translate(glm::mat4(1.0f), _pointlight_pos);
-
-    /* Create model */
-    /****************************/
-    _model = std::make_unique<Model>("../data/Objects/Cottage/cottage.obj");
-
-    _modelMat = glm::mat4(1.0f); // Identity
-    _modelMat = glm::rotate(_modelMat, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    _modelMat = glm::translate(_modelMat, glm::vec3(0.0f, -2.0f, 0.0f));
-    _modelMat = glm::scale(_modelMat, glm::vec3(0.1f));
+    _meshMat = glm::mat4(1.0f); // Identity
 
     /* Create camera */
     /*****************/
-    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 7.0f, 15.0f));
+    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     lastX = scr_width / 2.0f;
     lastY = scr_height / 2.0f;
     firstMouse = true;
@@ -100,49 +68,29 @@ void Scene::Draw()
     /***********************/
     _program->setMat4("view", _view);
     _program->setMat4("projection", _projection);
+    _program->setVec3("viewPos", _camera->getPosition());
 
     /* Set lights */
     /**************/
-    _program->setVec3("dirLight.direction", glm::vec3(-0.5f, -0.5f, -0.5f));
-    _program->setVec3("dirLight.ambient", glm::vec3(0.1f));
-    _program->setVec3("dirLight.diffuse", glm::vec3(0.4f));
+    _program->setVec3("dirLight.direction", glm::vec3(0.0f, 0.0f, -1.0f));
+    _program->setVec3("dirLight.ambient", glm::vec3(0.8f));
+    _program->setVec3("dirLight.diffuse", glm::vec3(0.8f));
+    _program->setVec3("dirLight.specular", glm::vec3(1.0f));
 
-    _program->setVec3("pointLight.position", _pointlight_pos);
-    _program->setFloat("pointLight.constant", 0.3f);
-    _program->setFloat("pointLight.linear", 0.1f);
-    _program->setFloat("pointLight.quadratic", 0.0f);
-    _program->setVec3("pointLight.ambient", glm::vec3(0.1f));
-    _program->setVec3("pointLight.diffuse", glm::vec3(1.0f));
-
-    /* Draw plan */
-    /*************/
-    _program->setMat4("model", _planMat);
-    _program->setVec3("diffuse", glm::vec3(0.3f, 0.6f, 0.2f));
+    /* Draw polyhedron */
+    /*******************/
+    _program->setMat4("model", _meshMat);
+    _program->setVec3("ambient", glm::vec3(0.02f, 0.17f, 0.02f));
+    _program->setVec3("diffuse", glm::vec3(0.07f, 0.61f, 0.07f));
+    _program->setVec3("specular", glm::vec3(0.63f, 0.72f, 0.63f));
+    _program->setFloat("shininess", 128.0f * 0.6f);
     _program->setInt("hasTexture", 0);
 
     _mesh->Draw(_program);
 
-    /* Draw tower */
-    /**************/
-    _program->setMat4("model", _modelMat);
-    _program->setVec3("diffuse", glm::vec3(0.7f, 0.3f, 0.0f));
-    _program->setInt("hasTexture", 1);
-
-    _model->Draw(_program);
-
     /* Unbind shader program */
     /*************************/
     _program->unbind();
-
-    /* Draw LightCube */
-    /******************/
-    _program_lightcube->bind();
-    _program_lightcube->setMat4("view", _view);
-    _program_lightcube->setMat4("projection", _projection);
-    _program_lightcube->setMat4("model", _lightcubeMat);
-
-    _lightcube->Draw(_program_lightcube);
-    _program_lightcube->unbind();
 }
 
 void Scene::ProcessKeyboard(Camera_Movement direction, float deltaTime)

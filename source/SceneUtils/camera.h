@@ -56,6 +56,7 @@ public:
      */
     void ProcessMouseScroll(float yoffset);
 
+    inline glm::vec3 getPosition() { return Position; }
     inline float getZoom() { return Zoom; }
 
 private:
