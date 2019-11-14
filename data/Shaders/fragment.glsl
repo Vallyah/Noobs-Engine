@@ -29,8 +29,9 @@ void main()
         Kd = diffuse;
         frag_norm = normalize(normal);
     }
-    float dir_shadow = ShadowCalculation(pos_dirlightspace);
-    vec3 result = CalcDirLight(dirLight, frag_norm, Kd, dir_shadow);
-    result += CalcPointLight(pointLight, frag_norm, world_pos, Kd);
+    float shadow = DirShadowCalculation(pos_dirlightspace);
+    vec3 result = CalcDirLight(dirLight, frag_norm, Kd, shadow);
+    shadow = PointShadowCalculation(pointLight, world_pos, frag_norm);
+    result += CalcPointLight(pointLight, frag_norm, world_pos, Kd, shadow);
     fragColor = vec4(result, 1.0f);
 }

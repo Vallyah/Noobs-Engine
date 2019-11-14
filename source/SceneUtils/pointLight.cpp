@@ -67,7 +67,8 @@ PointLight::PointLight(glm::vec3 position, glm::vec3 ambient, glm::vec3 diffuse,
     /* Transform matrices */
     /**********************/
     float aspect = (float) SHADOW_WIDTH / (float) SHADOW_HEIGHT;
-    glm::mat4 proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 25.0f);
+    _farplane = 25.0f;
+    glm::mat4 proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, _farplane);
 
     _transforms.push_back(proj *
          glm::lookAt(_position, _position + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0)));

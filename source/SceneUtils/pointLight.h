@@ -12,7 +12,7 @@ class PointLight {
 public:
     PointLight(glm::vec3 position, glm::vec3 ambient = glm::vec3(0.1f),
                glm::vec3 diffuse = glm::vec3(1.0f), float constant = 0.4f,
-               float linear = 0.15f, float quadratic = 0.0f);
+               float linear = 0.1f, float quadratic = 0.1f);
     ~PointLight() {};
 
     void DrawLightCube(std::shared_ptr<Shader> shader);
@@ -23,9 +23,12 @@ public:
     inline float constant() { return _constant; };
     inline float linear() { return _linear; };
     inline float quadratic() { return _quadratic; };
+    inline float farplane() { return _farplane; };
+
+    inline std::vector<glm::mat4> transforms() { return _transforms; };
 
     inline unsigned int fbo() { return _depthMapFBO; };
-    inline unsigned int depthmap() { return _depthCubemap; };
+    inline unsigned int depthMap() { return _depthCubemap; };
 
 private:
     glm::vec3 _position;
@@ -34,6 +37,7 @@ private:
     float _constant;
     float _linear;
     float _quadratic;
+    float _farplane;
 
     std::vector<glm::mat4> _transforms;
     unsigned int _depthCubemap;

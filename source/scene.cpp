@@ -14,6 +14,9 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
                                         "../data/Shaders/fragment.glsl");
     _program_shadowmaps = std::make_shared<Shader>("../data/Shaders/vertex_shadowmap.glsl",
                                                    "../data/Shaders/fragment_shadowmap.glsl");
+    _program_cubeshadowmap = std::make_shared<Shader>("../data/Shaders/vertex_cubeshadow.glsl",
+                                                   "../data/Shaders/fragment_cubeshadow.glsl",
+                                                   "../data/Shaders/geometry_cubeshadow.glsl");
     _program_quad = std::make_shared<Shader>("../data/Shaders/vertex_quad.glsl",
                                              "../data/Shaders/fragment_quad.glsl");
     _program_lightcube = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
@@ -84,12 +87,12 @@ void Scene::Draw()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // pointlight
-    /* glBindFramebuffer(GL_FRAMEBUFFER, _pointlight->fbo()); */
-    /* glClear(GL_DEPTH_BUFFER_BIT); */
-    /* glCullFace(GL_FRONT); */
-    /* RenderScene_depthMaps(); */
-    /* glCullFace(GL_BACK); */
-    /* glBindFramebuffer(GL_FRAMEBUFFER, 0); */
+    glBindFramebuffer(GL_FRAMEBUFFER, _pointlight->fbo());
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_FRONT);
+    RenderScene_cubeShadowMap();
+    glCullFace(GL_BACK);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // debug with screen quad
     /* glViewport(0, 0, scr_width, scr_height); */
@@ -101,7 +104,6 @@ void Scene::Draw()
     // render scene normally
     glViewport(0, 0, scr_width, scr_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindTexture(GL_TEXTURE_2D, _dirlight->depthMap());
 
     RenderScene_normal();
 }
@@ -117,6 +119,16 @@ void Scene::RenderScene_normal()
     /* Bind shader program */
     /***********************/
     _program->bind();
+
+    /* Shadow textures */
+    /*******************/
+
+    _program->setInt("point_shadowMap", 10);
+    _program->setInt("dir_shadowMap", 11);
+    glActiveTexture(GL_TEXTURE10);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, _pointlight->depthMap());
+    glActiveTexture(GL_TEXTURE11);
+    glBindTexture(GL_TEXTURE_2D, _dirlight->depthMap());
 
     /* Set camera matrices */
     /***********************/
@@ -134,6 +146,7 @@ void Scene::RenderScene_normal()
     _program->setFloat("pointLight.constant", _pointlight->constant());
     _program->setFloat("pointLight.linear", _pointlight->linear());
     _program->setFloat("pointLight.quadratic", _pointlight->quadratic());
+    _program->setFloat("pointLight.far_plane", _pointlight->farplane());
     _program->setVec3("pointLight.ambient", _pointlight->ambient());
     _program->setVec3("pointLight.diffuse", _pointlight->diffuse());
 
@@ -193,6 +206,36 @@ void Scene::RenderScene_depthMaps()
     /* Unbind shader program */
     /*************************/
     _program_shadowmaps->unbind();
+}
+
+void Scene::RenderScene_cubeShadowMap()
+{
+    /* Bind shader program */
+    /***********************/
+    _program_cubeshadowmap->bind();
+
+    /* Set camera matrices */
+    /***********************/
+    _program_cubeshadowmap->setVec3("light_pos", _pointlight->position());
+    _program_cubeshadowmap->setFloat("far_plane", _pointlight->farplane());
+    int loc = _program_cubeshadowmap->getUniformLocation("shadow_transform");
+    glUniformMatrix4fv(loc, 6, GL_FALSE, glm::value_ptr(_pointlight->transforms()[0]));
+
+    /* Draw plan */
+    /*************/
+    _program_cubeshadowmap->setMat4("model", _planMat);
+
+    _mesh->Draw(_program_cubeshadowmap);
+
+    /* Draw model */
+    /**************/
+    _program_cubeshadowmap->setMat4("model", _modelMat);
+
+    _model->Draw(_program_cubeshadowmap);
+
+    /* Unbind shader program */
+    /*************************/
+    _program_cubeshadowmap->unbind();
 }
 
 void Scene::ProcessKeyboard(Camera_Movement direction, float deltaTime)

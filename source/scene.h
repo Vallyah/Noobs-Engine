@@ -31,6 +31,7 @@ private:
 
     std::shared_ptr<Shader> _program;
     std::shared_ptr<Shader> _program_shadowmaps;
+    std::shared_ptr<Shader> _program_cubeshadowmap;
     std::shared_ptr<Shader> _program_quad;
     std::shared_ptr<Shader> _program_lightcube;
 
@@ -53,6 +54,7 @@ private:
 
     void RenderScene_normal();
     void RenderScene_depthMaps();
+    void RenderScene_cubeShadowMap();
 };
 
 #endif
