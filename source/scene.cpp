@@ -112,6 +112,24 @@ void Scene::ProcessKeyboard(const char k)
         case 'r':
             _program->refreshFragment();
             break;
+        case '0':
+            lod = 0;
+            break;
+        case '1':
+            lod = 1;
+            break;
+        case '2':
+            lod = 2;
+            break;
+        case '3':
+            lod = 3;
+            break;
+        case '4':
+            lod = 4;
+            break;
+        case '5':
+            lod = 5;
+            break;
         default:
             break;
     }

@@ -156,6 +156,20 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
         scene->ProcessKeyboard('r');
 
+    // press 0-5 to set lod to pressed value
+    if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+        scene->ProcessKeyboard('0');
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+        scene->ProcessKeyboard('1');
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        scene->ProcessKeyboard('2');
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+        scene->ProcessKeyboard('3');
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        scene->ProcessKeyboard('4');
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        scene->ProcessKeyboard('5');
+
     // press arrow keys to move camera
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         scene->ProcessKeyboard(FORWARD, deltaTime);
