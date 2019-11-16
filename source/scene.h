@@ -27,7 +27,8 @@ private:
 
     float lod;
 
-    std::shared_ptr<Shader> _program;
+    std::shared_ptr<Shader> _pntriangles_program;
+    std::shared_ptr<Shader> _phong_program;
 
     std::unique_ptr<SimpleMesh> _mesh;
 
@@ -36,7 +37,8 @@ private:
     float lastY;
     bool firstMouse;
 
-    glm::mat4 _meshMat;
+    glm::mat4 _pntriangles_mat;
+    glm::mat4 _phong_mat;
     glm::mat4 _view;
     glm::mat4 _projection;
 };
