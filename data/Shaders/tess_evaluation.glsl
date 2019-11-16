@@ -11,17 +11,17 @@ struct Coefs {
     float n101;
 };
 
-uniform mat4 model;
+
 uniform mat4 view;
 uniform mat4 projection;
 
 layout(triangles, fractional_odd_spacing, ccw) in;
 
-in vec3 tc_normal[3];
-in Coefs tc_coefs[3];
+in vec3 tc_normal[];
+in Coefs tc_coefs[];
 
 out vec3 te_normal;
-out vec3 world_pos;
+out vec3 te_world_pos;
 
 void main()
 {
@@ -59,7 +59,7 @@ void main()
                 b210 * uvw2[2] * uvw[0] + b120 * uvw2[0] * uvw[2] +
                 b201 * uvw2[2] * uvw[1] + b021 * uvw2[0] * uvw[1] +
                 b102 * uvw2[1] * uvw[2] + b012 * uvw2[1] * uvw[0] +
-                6.0f * b111 * uvw;
-    gl_Position = projection * view * model * vec4(buvw,1.0);
-    world_pos = (model * vec4(buvw, 1.0f)).xyz;
+                6.0f * b111 * uvw[0] * uvw[1] * uvw[2];
+    gl_Position = projection * view * vec4(buvw,1.0);
+    te_world_pos = (vec4(buvw, 1.0f)).xyz;
 }
