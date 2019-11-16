@@ -1,4 +1,4 @@
-in vec3 world_pos;
+in vec3 te_world_pos;
 in vec3 te_normal;
 
 uniform vec3 ambient;
@@ -21,7 +21,7 @@ void main()
     vec3 Ks = specular;
     vec3 Ka = ambient;
     vec3 frag_norm = normalize(te_normal);
-    vec3 viewDir = normalize(viewPos - world_pos);
+    vec3 viewDir = normalize(viewPos - te_world_pos);
     
     vec3 color = CalcDirLight(dirLight, frag_norm, viewDir, Ka, Kd, Ks, shininess);
     

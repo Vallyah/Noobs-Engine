@@ -77,7 +77,7 @@ void SimpleMesh::Draw(std::shared_ptr<Shader> shader)
 
     // draw mesh
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_PATCHES, _indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     // always good practice to set everything back to defaults once configured.

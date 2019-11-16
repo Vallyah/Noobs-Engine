@@ -25,6 +25,8 @@ private:
     unsigned int scr_width;
     unsigned int scr_height;
 
+    float lod;
+
     std::shared_ptr<Shader> _program;
 
     std::unique_ptr<SimpleMesh> _mesh;

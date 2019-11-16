@@ -51,9 +51,9 @@ void main()
     float P0 = gl_in[0].gl_Position[gl_InvocationID];
     float P1 = gl_in[1].gl_Position[gl_InvocationID];
     float P2 = gl_in[2].gl_Position[gl_InvocationID];
-    float N0 = iNormal[0][gl_InvocationID];
-    float N1 = iNormal[1][gl_InvocationID];
-    float N2 = iNormal[2][gl_InvocationID];
+    float N0 = v_normal[0][gl_InvocationID];
+    float N1 = v_normal[1][gl_InvocationID];
+    float N2 = v_normal[2][gl_InvocationID];
     
     // compute coefs
     /* Geometry */

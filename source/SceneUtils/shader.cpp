@@ -52,31 +52,31 @@ Shader::ShaderProgramSource Shader::parseShaderFile(const std::string& vertexsha
     std::stringstream ss[5];
 
     // Extract Vertex Shader
-    ss[0] << "#version 400 core\n\n"; // Header
+    ss[0] << "#version 410 core\n\n"; // Header
     ss[0] << readGLSLFile(vertexshaderpath, 0);
 
     // Extract Fragment Shader
-    ss[1] << "#version 400 core\n\n"; // Header
+    ss[1] << "#version 410 core\n\n"; // Header
     ss[1] << readGLSLFile(fragmentshaderpath, 0);
 
     // Extract Geometry Shader
     if (geometryshaderpath.compare(""))
     {
-        ss[2] << "#version 400 core\n\n"; // Header
+        ss[2] << "#version 410 core\n\n"; // Header
         ss[2] << readGLSLFile(geometryshaderpath, 0);
     }
 
     // Extract Tesselation Control Shader
     if (tesscontrolshaderpath.compare(""))
     {
-        ss[3] << "#version 400 core\n\n"; // Header
+        ss[3] << "#version 410 core\n\n"; // Header
         ss[3] << readGLSLFile(tesscontrolshaderpath, 0);
     }
 
     // Extract Tesselation Evaluation Shader
     if (tessevaluationshaderpath.compare(""))
     {
-        ss[4] << "#version 400 core\n\n"; // Header
+        ss[4] << "#version 410 core\n\n"; // Header
         ss[4] << readGLSLFile(tessevaluationshaderpath, 0);
     }
 
@@ -169,7 +169,7 @@ void Shader::refreshFragment()
 {
     // Read new shader
     std::stringstream new_frag;
-    new_frag << "#version 400 core\n\n"; // Header
+    new_frag << "#version 410 core\n\n"; // Header
     new_frag << readGLSLFile(m_fragmentShaderPath, 0);
 
     new_frag.str();

@@ -10,7 +10,10 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     /* Create shader programs */
     /*************************/
     _program = std::make_shared<Shader>("../data/Shaders/vertex.glsl",
-                                        "../data/Shaders/fragment.glsl");
+                                        "../data/Shaders/fragment.glsl",
+                                        "",
+                                        "../data/Shaders/tess_control.glsl",
+                                        "../data/Shaders/tess_evaluation.glsl");
 
     /* Create geometry for polyhedron */
     /**********************************/
@@ -28,14 +31,14 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
     vertices[5].Position = glm::vec3(0.0f, 0.0f, -1.0f);
     vertices[5].Normal = vertices[5].Position;
 
-    std::vector<unsigned int> indices = { 0, 1, 2,
-                                          0, 2, 4,
-                                          0, 4, 5,
-                                          0, 5, 1,
-                                          3, 1, 5,
-                                          3, 5, 4,
-                                          3, 4, 2,
-                                          3, 2, 1 };
+    std::vector<unsigned int> indices = { 2, 0, 1,
+                                          2, 0, 4,
+                                          5, 0, 4,
+                                          5, 0, 1,
+                                          5, 3, 1,
+                                          5, 3, 4,
+                                          2, 3, 4,
+                                          2, 3, 1 };
 
     std::vector<Texture> textures = {};
 
@@ -43,9 +46,11 @@ Scene::Scene(const unsigned int width, const unsigned int height) : scr_width(wi
 
     _meshMat = glm::mat4(1.0f); // Identity
 
+    lod = 0.0f;
+
     /* Create camera */
     /*****************/
-    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+    _camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 6.0f));
     lastX = scr_width / 2.0f;
     lastY = scr_height / 2.0f;
     firstMouse = true;
@@ -64,6 +69,8 @@ void Scene::Draw()
     /***********************/
     _program->bind();
 
+    glPatchParameteri(GL_PATCH_VERTICES, 3); // tesselation patch size
+
     /* Set camera matrices */
     /***********************/
     _program->setMat4("view", _view);
@@ -79,12 +86,12 @@ void Scene::Draw()
 
     /* Draw polyhedron */
     /*******************/
+    _program->setFloat("lod", lod);
     _program->setMat4("model", _meshMat);
     _program->setVec3("ambient", glm::vec3(0.02f, 0.17f, 0.02f));
     _program->setVec3("diffuse", glm::vec3(0.07f, 0.61f, 0.07f));
     _program->setVec3("specular", glm::vec3(0.63f, 0.72f, 0.63f));
     _program->setFloat("shininess", 128.0f * 0.6f);
-    _program->setInt("hasTexture", 0);
 
     _mesh->Draw(_program);
 
