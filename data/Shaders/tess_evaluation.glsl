@@ -15,7 +15,7 @@ struct Coefs {
 uniform mat4 view;
 uniform mat4 projection;
 
-layout(triangles, fractional_odd_spacing, ccw) in;
+layout(triangles, equal_spacing, ccw) in;
 
 in vec3 tc_normal[];
 in Coefs tc_coefs[];
