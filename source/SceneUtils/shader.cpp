@@ -8,27 +8,23 @@
 
 #include <glad/glad.h>
 
-/* Shader::Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath) */
-/* { */
-/*     m_fragmentShaderPath = fragmentshaderpath; */
-/*     m_vertexShaderPath = vertexshaderpath; */
-/*     const ShaderProgramSource shaderProgramSource = parseShaderFile(vertexshaderpath, */
-/*                                                                     fragmentshaderpath); */
-/*     m_id = createShader(shaderProgramSource.vertex, shaderProgramSource.fragment); */
-/*     unbind(); // By default, a shader is unbound after creation. */
-/* } */
-
 Shader::Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath,
-               const std::string& geometryshaderpath)
+               const std::string& geometryshaderpath, const std::string& tesscontrolshaderpath,
+               const std::string& tessevaluationshaderpath)
 {
     m_fragmentShaderPath = fragmentshaderpath;
     m_vertexShaderPath = vertexshaderpath;
     m_geometryShaderPath = geometryshaderpath;
+    m_tesscontrolShaderPath = tesscontrolshaderpath;
+    m_tessevaluationShaderPath = tessevaluationshaderpath;
     const ShaderProgramSource shaderProgramSource = parseShaderFile(vertexshaderpath,
                                                                     fragmentshaderpath,
-                                                                    geometryshaderpath);
+                                                                    geometryshaderpath,
+                                                                    tesscontrolshaderpath,
+                                                                    tessevaluationshaderpath);
     m_id = createShader(shaderProgramSource.vertex, shaderProgramSource.fragment,
-                        shaderProgramSource.geometry);
+                        shaderProgramSource.geometry, shaderProgramSource.tesscontrol,
+                        shaderProgramSource.tessevaluation);
     unbind(); // By default, a shader is unbound after creation.
 }
 
@@ -49,9 +45,11 @@ void Shader::unbind() const
 
 Shader::ShaderProgramSource Shader::parseShaderFile(const std::string& vertexshaderpath,
                                                     const std::string& fragmentshaderpath,
-                                                    const std::string& geometryshaderpath)
+                                                    const std::string& geometryshaderpath,
+                                                    const std::string& tesscontrolshaderpath,
+                                                    const std::string& tessevaluationshaderpath)
 {
-    std::stringstream ss[3];
+    std::stringstream ss[5];
 
     // Extract Vertex Shader
     ss[0] << "#version 400 core\n\n"; // Header
@@ -67,10 +65,22 @@ Shader::ShaderProgramSource Shader::parseShaderFile(const std::string& vertexsha
         ss[2] << "#version 400 core\n\n"; // Header
         ss[2] << readGLSLFile(geometryshaderpath, 0);
     }
-    /* else */
-    /*     ss[2] << ""; */
 
-    return {ss[0].str(), ss[1].str(), ss[2].str() } ;
+    // Extract Tesselation Control Shader
+    if (tesscontrolshaderpath.compare(""))
+    {
+        ss[3] << "#version 400 core\n\n"; // Header
+        ss[3] << readGLSLFile(tesscontrolshaderpath, 0);
+    }
+
+    // Extract Tesselation Evaluation Shader
+    if (tessevaluationshaderpath.compare(""))
+    {
+        ss[4] << "#version 400 core\n\n"; // Header
+        ss[4] << readGLSLFile(tessevaluationshaderpath, 0);
+    }
+
+    return {ss[0].str(), ss[1].str(), ss[2].str(), ss[3].str(), ss[4].str() } ;
 }
 
 int Shader::compileShader(unsigned int type, const std::string& source)
@@ -101,7 +111,8 @@ int Shader::compileShader(unsigned int type, const std::string& source)
 }
 
 int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader,
-                         const std::string& geometryShader)
+                         const std::string& geometryShader, const std::string& tesscontrolShader,
+                         const std::string& tessevaluationShader)
 {
     int program = glCreateProgram();
     int vs = compileShader(GL_VERTEX_SHADER, vertexShader);
@@ -111,12 +122,25 @@ int Shader::createShader(const std::string& vertexShader, const std::string& fra
     else
         m_gs = 0;
 
-    if (vs < 0 || m_fs < 0 || m_gs < 0) return -1; // The compilation has failed..
+    if (tesscontrolShader.compare(""))
+        m_tcs = compileShader(GL_TESS_CONTROL_SHADER, tesscontrolShader);
+    else
+        m_tcs = 0;
+    if (tessevaluationShader.compare(""))
+        m_tes = compileShader(GL_TESS_EVALUATION_SHADER, tessevaluationShader);
+    else
+        m_tes = 0;
+
+    if (vs < 0 || m_fs < 0 || m_gs < 0 || m_tcs < 0 || m_tes < 0) return -1; // The compilation has failed..
 
     glAttachShader(program, vs);
     glAttachShader(program, m_fs);
     if (geometryShader.compare(""))
         glAttachShader(program, m_gs);
+    if (tesscontrolShader.compare(""))
+        glAttachShader(program, m_tcs);
+    if (tessevaluationShader.compare(""))
+        glAttachShader(program, m_tes);
 
     glLinkProgram(program);
 
@@ -131,8 +155,12 @@ int Shader::createShader(const std::string& vertexShader, const std::string& fra
 
     glDeleteShader(vs);
     glDeleteShader(m_fs);
-    if (!geometryShader.compare(""))
+    if (geometryShader.compare(""))
         glDeleteShader(m_gs);
+    if (tesscontrolShader.compare(""))
+        glDeleteShader(m_tcs);
+    if (tessevaluationShader.compare(""))
+        glDeleteShader(m_tes);
 
     return program;
 }

@@ -10,7 +10,8 @@ class Shader
 public:
     //Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath);
     Shader(const std::string& vertexshaderpath, const std::string& fragmentshaderpath,
-           const std::string& geometryshaderpath = "");
+           const std::string& geometryshaderpath = "", const std::string& tesscontrolshaderpath = "",
+           const std::string& tessevaluationshaderpath = "");
     ~Shader();
 
     /// Bind this Shader (aka program).
@@ -52,27 +53,36 @@ private:
     std::string m_fragmentShaderPath;
     std::string m_vertexShaderPath;
     std::string m_geometryShaderPath;
+    std::string m_tesscontrolShaderPath;
+    std::string m_tessevaluationShaderPath;
     int m_fs;
     int m_gs;
+    int m_tcs;
+    int m_tes;
 
     struct ShaderProgramSource
     {
         std::string vertex;
         std::string fragment;
         std::string geometry;
+        std::string tesscontrol;
+        std::string tessevaluation;
     };
 
     /// Extract Vertex shader and Fragment shader codes
     ShaderProgramSource parseShaderFile(const std::string& vertexshaderpath,
                                         const std::string& fragmentshaderpath,
-                                        const std::string& geometryshaderpath);
+                                        const std::string& geometryshaderpath,
+                                        const std::string& tesscontrolshaderpath,
+                                        const std::string& tessevaluationshaderpath);
 
     /// Compile a glsl code depending on its type.
     int compileShader(unsigned int type, const std::string& source);
 
     /// Create a shader from the vertex code and the fragment code.
     int createShader(const std::string& vertexShader, const std::string& fragmentShader,
-                     const std::string& geometryShader);
+                     const std::string& geometryShader, const std::string& tesscontrolShader,
+                     const std::string& tessevaluationShader);
 
     /// Read a glsl file and extract code, managing includes recursively
     std::string readGLSLFile(const std::string& filepath, int level);
