@@ -39,7 +39,7 @@ ExternalHeaderOnly_Add(Catch
 # target_link_libraries (noobsEngine PRIVATE GLFW)
 # #include <GLFW/glfw3.h>
 ExternalDownloadNowGit(GLFW
-    https://github.com/glfw/glfw origin/master)
+    https://github.com/glfw/glfw master)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
